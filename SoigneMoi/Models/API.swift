@@ -12,6 +12,9 @@ enum ApiError: Error {
     case serializationError
     case missingToken
     case authenticationFailure
+    case serverConnectionError
+    case cannotConnectToHost
+    case domain
     case unhandledResponse(Int)
     
     var description: String {
@@ -24,6 +27,12 @@ enum ApiError: Error {
             return "Token manquant"
         case .authenticationFailure:
             return "Échec de l'authentification. Identifiants incorrects."
+        case .serverConnectionError:
+            return "Impossible de se connecter au serveur."
+        case .cannotConnectToHost:
+            return "Impossible de se connecter au serveur."
+        case .domain:
+            return "Impossible de joindre le serveur."
         case .unhandledResponse(let statusCode):
             return "Réponse non gérée. Code de réponse : \(statusCode)"
         }
@@ -73,7 +82,7 @@ class Api {
             }
             
             if let httpResponse = response as? HTTPURLResponse {
-                print("Code de réponse : \(httpResponse.statusCode)")
+                print("Code http de réponse : \(httpResponse.statusCode)")
                 
                 // Gérer les différentes réponses HTTP
                 switch httpResponse.statusCode {
