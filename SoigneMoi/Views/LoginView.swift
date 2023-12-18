@@ -18,7 +18,7 @@ struct LoginView: View {
             DashboardView()
         } else {
             VStack {
-                Image("logo")
+                Image("logo-white")
                     .imageScale(.large)
                     .foregroundColor(.accentColor)
                 
