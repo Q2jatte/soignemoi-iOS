@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+struct CustomHeaderTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 36))
+            .bold()
+            .foregroundColor(.white) // Vous pouvez personnaliser la couleur ici
+    }
+}
 struct CustomTitle: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -23,11 +31,26 @@ struct CustomTitleOrange: ViewModifier {
     }
 }
 
+struct CustomBodyBold: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 20))
+            .bold()
+            .foregroundColor(Color("LightBlack")) // Vous pouvez personnaliser la couleur ici
+    }
+}
+
 extension View {
+    func customHeaderTitle() -> some View {
+        self.modifier(CustomTitle())
+    }
     func customTitle() -> some View {
         self.modifier(CustomTitle())
     }
     func customTitleOrange() -> some View {
         self.modifier(CustomTitleOrange())
+    }
+    func customBodyBold() -> some View {
+        self.modifier(CustomBodyBold())
     }
 }

@@ -15,11 +15,9 @@ struct MainView: View {
         VStack {
             switch selectedCategoryId {
             case 1:
-                Category1View()
+                DashboardView()
             case 2:
-                Category2View()
-            case 3:
-                Category3View()
+                PatientView()            
             default:
                 Text("Unknown category")
             }

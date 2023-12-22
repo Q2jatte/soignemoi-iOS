@@ -14,10 +14,10 @@ struct MenuView: View {
     @Binding var isReduced: Bool
     
     // contenu du menu
-    var menuData = MenuData.menuItems
+    @ObservedObject var menuVM: MenuViewModel
     
     var body: some View {
-        List(menuData, id: \.id) { item in
+        List(menuVM.menuItems, id: \.id) { item in
            HStack {
                if item.id == selectedCategoryId {
                    Image(systemName: item.imageName)
@@ -53,8 +53,9 @@ struct MenuView_Previews: PreviewProvider {
     
     @State static var menuIndex:Int = 1
     @State static var isReduced: Bool = false
+    static var menuVM: MenuViewModel = MenuViewModel()
     
     static var previews: some View {
-        MenuView(selectedCategoryId: $menuIndex, isReduced: $isReduced)
+        MenuView(selectedCategoryId: $menuIndex, isReduced: $isReduced, menuVM: menuVM)
     }
 }

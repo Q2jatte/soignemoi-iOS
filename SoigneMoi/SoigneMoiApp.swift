@@ -10,10 +10,14 @@ import SwiftUI
 @main
 struct SoigneMoiApp: App {
     var body: some Scene {
-        let user = User(username: "", password: "")
-        let viewModel = LoginViewModel(user: user)
+        
+        // les sources de vérités
+        let loginVM = LoginViewModel()
+        let dashboardVM = DashboardViewModel()
+        let menuVM = MenuViewModel()
+        
         WindowGroup {
-            LoginView(viewModel: viewModel)
+            LoginView(loginVM: loginVM, dashboardVM: dashboardVM, menuVM: menuVM)
         }
     }
 }
