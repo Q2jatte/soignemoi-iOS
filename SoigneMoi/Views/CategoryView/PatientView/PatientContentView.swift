@@ -35,7 +35,6 @@ struct PatientContentView: View {
                     List(patientVM.patientsList) { patient in
                         NavigationLink(destination: PatientDetailView(patient: patient, patientVM: patientVM)) {
                             Button {
-                                print("Push patient line")
                                 patientVM.patientId = patient.id
                                 patientVM.firstName = patient.user.firstName
                                 patientVM.lastName = patient.user.lastName

@@ -12,5 +12,5 @@ struct Stay : Codable, Identifiable {
     var entranceDate: Date
     var dischargeDate: Date
     var reason: String
-    var service: [String]
+    var service: Service
 }

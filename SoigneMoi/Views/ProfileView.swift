@@ -11,21 +11,35 @@ struct ProfileView: View {
     
     @Binding var isReduced: Bool
     
+    let activeUser = ActiveUser.shared
+    
     var body: some View {
         HStack {
             
-            Image("img14")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 60, height: 60)
-                .foregroundColor(.white)
-                .clipShape(Circle())
-            if !isReduced {
+            // Image du profil
+            
+            if let _ = UIImage(named: activeUser.profile.profileImageName) {
+                Image(activeUser.profile.profileImageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.white)
+                    .clipShape(Circle())
+            } else {
+                
+                let imageUrl = Api.profileImageURL.appendingPathComponent(activeUser.profile.profileImageName)
+                AsyncImage(url: imageUrl){ image in image.resizable() } placeholder: { Color("Emerald") } .frame(width: 60, height: 60) .clipShape(Circle())
+                    
+                
+                
+            }
+            
+            if (!isReduced) {
                 VStack {
-                    Text("Pr. Ji-Won Park")
+                    Text("Dr. \(activeUser.profile.firstName) \(activeUser.profile.lastName)")
                         .bold()
                         .foregroundColor(.white)
-                    Text("Cardiologie")
+                    Text(activeUser.profile.doctor.service.name)
                         .foregroundColor(.white)
                     
                 }

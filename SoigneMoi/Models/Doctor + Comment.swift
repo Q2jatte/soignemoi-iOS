@@ -20,3 +20,7 @@ struct Comment : Codable, Identifiable {
     var doctor: Doctor?
     var patient: Patient?
 }
+
+struct Service : Codable {
+    var name: String
+}

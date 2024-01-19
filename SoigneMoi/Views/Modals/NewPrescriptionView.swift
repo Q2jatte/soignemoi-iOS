@@ -9,6 +9,8 @@ import SwiftUI
 
 struct NewPrescriptionView: View {
     /* MARK - Propriétés*/
+    @Environment(\.presentationMode) var presentationMode
+    
     @State private var endDate = Date()
     @State private var medications: [Medication] = []
     @State private var medicationName: String = ""
@@ -23,53 +25,89 @@ struct NewPrescriptionView: View {
     @State private var messageAlert = ""
     
     var body: some View {
-        
-        Form {
-            Section(header: Text("Infos patient")) {
-                Text(patientVM.firstName ?? "ErrorFirstName")
-                Text(patientVM.lastName ?? "ErrorLastName")
-            }
-            
-            Section(header: Text("Dates")) {
-                Text("Date de création : \(formattedDate(Date()))")
-                DatePicker("Fin de validité", selection: $endDate, in: Date()..., displayedComponents: .date)
-                    .datePickerStyle(.automatic)
-            }
-            
-            Section(header: Text("Traitements")) {
-                HStack {
-                    TextField("Nom du traitement", text: $medicationName)
-                    TextField("Posologie", text: $medicationDosage)
-                    Button(action: {
-                        // Ajouter un nouveau médicament
-                        addMedication()
-                    }) {
-                        Text("Ajouter")
-                    }
+        VStack {
+            Form {
+                Section(header: Text("Infos patient")) {
+                    Text(patientVM.firstName ?? "ErrorFirstName")
+                    Text(patientVM.lastName ?? "ErrorLastName")
                 }
-                ForEach(medications) { medication in
+                
+                Section(header: Text("Dates de validité")) {
                     HStack {
-                        Text(medication.name)
+                        Text("Date de création")
                         Spacer()
-                        Text(medication.dosage)
+                        Text(formattedDate(Date()))
+                            
                     }
+                    .padding()
+                    HStack {
+                        DatePicker("Fin de validité", selection: $endDate, in: Date()..., displayedComponents: .date)
+                            .datePickerStyle(.automatic)
+                    }
+                    .padding()
                 }
+                
+                Section(header: Text("Traitements")) {
+                    HStack {
+                        TextField("Nom du traitement", text: $medicationName)
+                        TextField("Posologie", text: $medicationDosage)
+                        Button(action: {
+                            // Ajouter un nouveau médicament
+                            addMedication()
+                        }) {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                    .foregroundColor(.white)
+                                Text("Ajouter")
+                                    .bold()
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .padding(10)
+                        .background(Color("Clementine"))
+                        .cornerRadius(10)
+                    }
+                    
+                    ForEach(medications.indices, id: \.self) { index in
+                            HStack {
+                                Text(medications[index].name)
+                                Spacer()
+                                Text(medications[index].dosage)
+                            }
+                        }
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text(titleAlert),
+                    message: Text(messageAlert),
+                    dismissButton: .default(Text("OK"))
+                )
             }
             
-            Button(action: {
-                // Enregistrer la prescription
-                addPrescription()                
-            }) {
-                Text("Enregistrer")
-            }
-        }
-        .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text(titleAlert),
-                        message: Text(messageAlert),
-                        dismissButton: .default(Text("OK"))
-                    )
+            // Bouton d'enregistrment
+            HStack {
+                Button(action: {
+                    // Enregistrer la prescription
+                    addPrescription()
+                }) {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                        Text("Enregistrer")
+                            .font(.largeTitle)
+                            .bold()
+                            .foregroundColor(.white)
+                    }
                 }
+                .padding(10)
+                .background(Color("Emerald"))
+                .cornerRadius(10)
+            }
+            .padding()
+        }
+        .background(Color("LightGrey"))
     }
     
     private func addMedication() {
@@ -97,7 +135,7 @@ struct NewPrescriptionView: View {
     
     private func formattedDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
+        dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
         return dateFormatter.string(from: date)
     }

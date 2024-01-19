@@ -12,10 +12,18 @@ struct LoginView: View {
     @ObservedObject var loginVM: LoginViewModel
     @ObservedObject var dashboardVM: DashboardViewModel
     @ObservedObject var menuVM: MenuViewModel
-    /* DEV */
-    @State private var username: String = "i.valencia@soignemoi.com"
-    @State private var password: String = "Pass12000!"
-        
+    
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var isLoading: Bool = false
+    /*
+    @FocusState private var focusedField: Field?
+
+    enum Field {
+        case username
+        case password
+    }
+      */
     var body: some View {
         if loginVM.isAuthenticated {
             ContentView(dashboardVM: dashboardVM, menuVM: menuVM)
@@ -33,41 +41,69 @@ struct LoginView: View {
                     .padding()
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 400)
+                    //.focused($focusedField, equals: .username)
                 
                 // password field
                 SecureField("Mot de passe", text: $password)
                     .padding()
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 400)
+                    //.focused($focusedField, equals: .password)
                 
                 // login button
-                Button(action: {
-                    ActiveUser.shared.configure(username: username, password: password)
-                    loginVM.login() { result in
-                        switch result {
-                        case .success(_):
-                            ActiveUser.shared.isAuthenticated = true
-                        case .failure(_):
-                            ActiveUser.shared.isAuthenticated = false
-                        }
+                if (!isLoading) {
+                    Button(action: {
+                        ActiveUser.shared.configure(username: username, password: password)
+                        isLoading = true
+                        
+                    }) {
+                        Text("Se connecter")
+                            .foregroundColor(.white)
                     }
-                }) {
-                    Text("Se connecter")
-                        .foregroundColor(.white)
+                    .padding()
+                    .background(Color("Emerald"))
+                    .cornerRadius(10)
+                    .shadow(radius: 6.0, x: 0, y: 6)
+                    
+                    // Error message
+                    Text(loginVM.error)
+                        .foregroundColor(Color("Clementine"))
+                        .font(.title)
+                } else {
+                    ProgressView()
+                        .padding()
+                        .onAppear {
+                            // Login vers api
+                            loginVM.login() { result in
+                                switch result {
+                                case .success(_):
+                                    
+                                    // Récupération du profil
+                                    loginVM.getProfile() { profile in
+                                        switch profile {
+                                        case .success(_):
+                                                ActiveUser.shared.isAuthenticated = true
+                                        case .failure(_):
+                                            ActiveUser.shared.isAuthenticated = false
+                                        }
+                                    }
+                                case .failure(_):
+                                    ActiveUser.shared.isAuthenticated = false
+                                }
+                                isLoading = false
+                            }
+                            
+                        }
                 }
-                .padding()
-                .background(Color("Emerald"))
-                .cornerRadius(10)
-                .shadow(radius: 6.0, x: 0, y: 6)
-                
-                // Error message
-                Text(loginVM.error)
-                    .foregroundColor(Color("Clementine"))
-                    .font(.title)
                 
                 Spacer()
                 
             }
+            /*
+            .onTapGesture {
+                // Masquer le clavier lorsque l'utilisateur tape à l'extérieur des champs de texte
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }*/
             .padding()
         }
     }    

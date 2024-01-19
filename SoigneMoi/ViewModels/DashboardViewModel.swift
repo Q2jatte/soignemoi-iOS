@@ -18,16 +18,7 @@ class DashboardViewModel: ObservableObject {
     @Published var menuWidth: CGFloat = 300
     @Published var isReduced: Bool = false
     
-    
-    static func formattedDate(dateString: String)-> Date {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        if let date = dateFormatter.date(from: dateString) {
-            return date
-        } else {
-            return Date()
-        }
-    }
+    private var api = Api()
     
     // Dashboard dynamic data
     @Published var patientsList: [VisitData] = []
@@ -35,7 +26,7 @@ class DashboardViewModel: ObservableObject {
     // MARK: - Méthodes
     
     func getPatients(completion: @escaping (Result<[VisitData], Error>) -> Void) {
-        Api.getPatientRequest() { result in
+        api.getPatientRequest() { result in
             
             switch result {
             case .success(let patientsList):
@@ -64,7 +55,15 @@ class DashboardViewModel: ObservableObject {
         } else {
             self.error = ApiError(error).description
         }
-    }    
+    }
     
-    
+    static func formattedDate(dateString: String)-> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        if let date = dateFormatter.date(from: dateString) {
+            return date
+        } else {
+            return Date()
+        }
+    }
 }

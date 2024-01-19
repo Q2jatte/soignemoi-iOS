@@ -15,6 +15,8 @@ class ActiveUser {
     var password: String // TODO : utiliser SwiftKeychzinWrapper pour le stockage du mot de passe
     var token: String // token JWT renvoyé par l'API
     var isAuthenticated: Bool
+    var profile: Profile // profile data
+    
     
     // Instance unique de la classe User (singleton)
     static let shared = ActiveUser()
@@ -26,7 +28,7 @@ class ActiveUser {
         self.password = ""
         self.token = ""
         self.isAuthenticated = false
-        
+        self.profile = Profile(firstName: "", lastName: "", doctor: DoctorResp(service: Service(name: "")), profileImageName: "")
     }
     
     // Fonction pour configurer les propriétés de l'utilisateur
@@ -39,4 +41,15 @@ class ActiveUser {
     func addToken(token: String) {
         self.token = token
     }
+}
+
+struct Profile: Codable {
+    var firstName: String
+    var lastName: String
+    var doctor: DoctorResp
+    var profileImageName: String
+}
+
+struct DoctorResp: Codable {
+    var service: Service
 }

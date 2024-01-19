@@ -25,11 +25,13 @@ class PatientViewModel: ObservableObject {
     @Published var prescriptions: [Prescription] = []
     @Published var comments: [Comment] = []
     
+    private var api = Api()
+    
     // MARK: - Méthodes
     
     // search patient by name
     func search(partial: String, completion: @escaping (Result<[Patient], Error>) -> Void) {
-        Api.searchPatientRequest(partial: partial) { result in
+        api.searchPatientRequest(partial: partial) { result in
             
             switch result {
             case .success(let patientsList):
@@ -54,7 +56,7 @@ class PatientViewModel: ObservableObject {
     func getCurrentStay(completion: @escaping (Result<[Stay], Error>) -> Void) {
         
         if let id = self.patientId {
-            Api.getStaysByPatientAndStatus(id: id, status: "current") { result in
+            api.getStaysByPatientAndStatus(id: id, status: "current") { result in
                 
                 switch result {
                 case .success(let currentStay):
@@ -82,7 +84,7 @@ class PatientViewModel: ObservableObject {
     func getOldStays(completion: @escaping (Result<[Stay], Error>) -> Void) {
         
         if let id = self.patientId {
-            Api.getStaysByPatientAndStatus(id: id, status: "old") { result in
+            api.getStaysByPatientAndStatus(id: id, status: "old") { result in
                 
                 switch result {
                 case .success(let oldStays):
@@ -111,7 +113,7 @@ class PatientViewModel: ObservableObject {
     func getPrescriptions(completion: @escaping (Result<[Prescription], Error>) -> Void) {
         
         if let id = self.patientId {
-            Api.getPrescriptionsForOnePatient(id: id) { result in
+            api.getPrescriptionsForOnePatient(id: id) { result in
                 
                 switch result {
                 case .success(let prescriptions):
@@ -140,7 +142,7 @@ class PatientViewModel: ObservableObject {
     func getComments(completion: @escaping (Result<[Comment], Error>) -> Void) {
         
         if let id = self.patientId {
-            Api.getcommentsForOnePatient(id: id) { result in
+            api.getcommentsForOnePatient(id: id) { result in
                 
                 switch result {
                 case .success(let comments):
@@ -181,15 +183,12 @@ class PatientViewModel: ObservableObject {
         let activePatient = Patient(id: patientId, user: User(firstName: firstName, lastName: lastName))
         let newPrescription = Prescription(startAt: Date(), endAt: endAt, medications: medications, patient: activePatient)
         
-        print("newPrescription : \(newPrescription)")
-        
         // Et on envoie
-        Api.createNewPrescription(prescription: newPrescription) { result in
+        api.createNewPrescription(prescription: newPrescription) { result in
             switch result {
             case .success(let message):
                 // Utilisation du DispatchQueue pour garantir que les modifications sont effectuées sur le thread principal
                 DispatchQueue.main.async {
-                    print("Message : \(message)")
                     completion(.success(message))
                 }
             case .failure(let error):
@@ -202,6 +201,27 @@ class PatientViewModel: ObservableObject {
         }
     }
     
+    // update endDate prescription
+    func updatePrescription(date: NewDate, completion: @escaping (Result<String, Error>) -> Void){
+        
+        // on envoie
+        api.updatePrescription(date: date) { result in
+            switch result {
+            case .success(let message):
+                // Utilisation du DispatchQueue pour garantir que les modifications sont effectuées sur le thread principal
+                DispatchQueue.main.async {
+                    completion(.success(message))
+                }
+            case .failure(let error):
+                print("La modification de la prescriptionc a échoué avec l'erreur : \(error)")
+                DispatchQueue.main.async {
+                    self.handleError(error)
+                    completion(.failure(error))
+                }
+            }
+        }
+        
+    }
     // Création d'un nouveau commentaire
     func createNewComment(comment: Comment, completion: @escaping (Result<String, Error>) -> Void) {
         
@@ -220,12 +240,11 @@ class PatientViewModel: ObservableObject {
         newComment.patient = activePatient
         
         // Et on envoie
-        Api.createNewComment(comment: newComment) { result in
+        api.createNewComment(comment: newComment) { result in
             switch result {
             case .success(let message):
                 // Utilisation du DispatchQueue pour garantir que les modifications sont effectuées sur le thread principal
                 DispatchQueue.main.async {
-                    print("Message : \(message)")
                     completion(.success(message))
                 }
             case .failure(let error):
@@ -254,7 +273,4 @@ class PatientViewModel: ObservableObject {
         lastName = patient.user.lastName
         completion()
     }
-    
-    
 }
-

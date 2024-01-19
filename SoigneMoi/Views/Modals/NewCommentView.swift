@@ -22,31 +22,50 @@ struct NewCommentView: View {
     
     var body: some View {
         
-        Form {
-            Section(header: Text("Infos patient")) {
-                Text(patientVM.firstName ?? "ErrorFirstName")
-                Text(patientVM.lastName ?? "ErrorLastName")
+        VStack {
+            Form {
+                Section(header: Text("Infos patient")) {
+                    Text(patientVM.firstName ?? "ErrorFirstName")
+                    Text(patientVM.lastName ?? "ErrorLastName")
+                }
+                
+                Section(header: Text("Avis médical")) {
+                    TextField("Titre", text: $commentTitle)
+                    TextField("Commentaire", text: $commentContent)
+                }
+                
+                
             }
-            
-            Section(header: Text("Dates")) {
-                TextField("Titre", text: $commentTitle)
-                TextField("Commentaire", text: $commentContent)   
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text(titleAlert),
+                    message: Text(messageAlert),
+                    dismissButton: .default(Text("OK"))
+                )
             }
             
             Button(action: {
                 // Enregistrer la prescription
                 addComment()
             }) {
-                Text("Enregistrer")
-            }
-        }
-        .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text(titleAlert),
-                        message: Text(messageAlert),
-                        dismissButton: .default(Text("OK"))
-                    )
+                HStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                    Text("Enregistrer")
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundColor(.white)
                 }
+            }
+            .padding(10)
+            .background(Color("Emerald"))
+            .cornerRadius(10)
+            
+            
+            Spacer()
+        }
+        .background(Color("LightGrey"))
     }
     
     private func addComment() {

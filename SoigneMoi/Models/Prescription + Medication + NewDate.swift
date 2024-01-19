@@ -21,3 +21,8 @@ struct Medication : Codable, Identifiable {
     var name: String
     var dosage: String
 }
+
+struct NewDate : Codable {
+    var id: Int
+    var date: Date
+}

@@ -1,7 +1,7 @@
 # SoigneMoi iOS App
 
-![Swift Version](Images/swift-badge.svg)
-![SwiftUI Version](Images/swiftui-badge.svg)
+![Static Badge](https://img.shields.io/badge/Swift-swift-blue?logo=swift)
+
 
 This application is dedicated to doctors at the SoigneMoi hospital. It allows, after authentication, to track patients, create medical prescriptions, and write reviews following a medical visit.
 

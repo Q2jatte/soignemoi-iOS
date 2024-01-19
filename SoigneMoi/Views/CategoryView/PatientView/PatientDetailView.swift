@@ -9,165 +9,281 @@ import SwiftUI
 
 struct PatientDetailView: View {
     
-    // Le patient
+    // MARK: - Properties
+    // patient
     var patient: Patient
     
     // La source de vérité
     @ObservedObject var patientVM: PatientViewModel
     
-    // Affichage des modules
+    // Modules state
     @State private var displayCurrentStay: Bool = false
     @State private var displayOldStays: Bool = false
     @State private var displayPrescriptions: Bool = false
     @State private var displayComments: Bool = false
     
-    // Affichage des modals
+    // Modals state
     @State private var isNewPrescriptionPresented = false
-    @State private var isNewCommentPresented = false    
+    @State private var isNewCommentPresented = false
+    
+    // Detail Modals state
+    @State private var selectedPrescription: Prescription?
+    @State private var selectedComment: Comment?
+    @State private var selectedStay: Stay?
+    
     
     var body: some View {
-        VStack {
-            
-            // Module séjour en cours
-            Text("Séjour en cours")
-            HStack {
-                Text("Service")
-                Spacer()
-                Text("Entrée")
-                Spacer()
-                Text("Sortie")
-                Spacer()
-                Text("Raison")
-            }
-            .padding()
+        NavigationStack {
+            // Arrays
             VStack {
                 
-                List(patientVM.currentStays) { stay in
-                    HStack {
-                        Text(stay.service[0])
-                        Spacer()
-                        Text("\(formattedDate(stay.entranceDate))")
-                        Spacer()
-                        Text("\(formattedDate(stay.dischargeDate))")
-                        Spacer()
-                        Text(stay.reason)
-                    }
-                    .padding()
-                }
-                /*
-                List(patientVM.currentStays.indices, id: \.self) { index in
-                    let stay = patientVM.currentStays[index]
-                    HStack {
-                        Text(stay.service[0])
-                        Spacer()
-                        Text("\(formattedDate(stay.entranceDate))")
-                        Spacer()
-                        Text("\(formattedDate(stay.dischargeDate))")
-                        Spacer()
-                        Text(stay.reason)
-                    }
-                    .padding()
-                    .listRowBackground(index % 2 == 0 ? Color.gray : Color.white)
-                }
-                 */
-            }
-            
-            // Module Prescriptions
-            VStack {
-                Text("Prescriptions")
-                List(patientVM.prescriptions) { prescription in
-                    HStack {
-                        Text("\(formattedDate(prescription.startAt))")
-                        Spacer()
-                        Text("\(prescription.medications.count)")
-                        Image(systemName: "pills.fill")
-                    }
+                // MARK: - Current stay
+                HStack {
+                    Text("Séjour en cours")
+                        .bold()
+                    Spacer()
                 }
                 
-                Button(action: {
-                    // Affichage de la modal
-                    isNewPrescriptionPresented.toggle()
-                }, label: {
+                VStack {
+                    
+                    // header titles
                     HStack {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(Color("Clementine"))
-                        Text("Ajouter")
-                            .foregroundColor(Color("Clementine"))
-                            .customBodyBold()
-                            
+                        Text("Service")
+                            .foregroundColor(Color("Emerald"))
+                        Spacer()
+                        Text("Entrée")
+                            .foregroundColor(Color("Emerald"))
+                        Spacer()
+                        Text("Sortie")
+                            .foregroundColor(Color("Emerald"))
+                        Spacer()
+                        Text("Raison")
+                            .foregroundColor(Color("Emerald"))
                     }
-                })
-            }
-            
-            // Modules commentaires
-            Text("Commentaires médicaux")
-            List(patientVM.comments) { comment in
-                HStack {
-                    Text("\(formattedDate(comment.createAt))")
-                    Text("\(comment.content)")                    
-                }
-            }
-            Button(action: {
-                // Affichage de la modal
-                isNewCommentPresented.toggle()
-            }, label: {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
-                        .foregroundColor(Color("Clementine"))
-                    Text("Ajouter")
-                        .foregroundColor(Color("Clementine"))
-                        .customBodyBold()
+                    
+                    // Data array
+                    if (patientVM.currentStays.isEmpty) {
+                        Text("Pas de séjour en cours")
+                    } else {
                         
+                        List(patientVM.currentStays) { stay in
+                            HStack {
+                                Text(stay.service.name)
+                                Spacer()
+                                Text("\(formattedDate(stay.entranceDate))")
+                                Spacer()
+                                Text("\(formattedDate(stay.dischargeDate))")
+                                Spacer()
+                                Text(stay.reason)
+                                    .lineLimit(1)
+                            }
+                        }
+                    }
                 }
-            })
-            
-            // Module séjours précédents
-            Text("Séjour précédent")
-            HStack {
-                Text("Service")
-                Spacer()
-                Text("Entrée")
-                Spacer()
-                Text("Sortie")
-                Spacer()
-                Text("Raison")
-            }
-            
-            List(patientVM.oldStays.indices, id: \.self) { index in
-                let stay = patientVM.oldStays[index]
+                .padding(10)
+                .background(Color("LightGrey"))
+                .cornerRadius(10)
+                
                 HStack {
-                    //Text(stay.service)
+                    
+                    // MARK: - Prescriptions
+                    VStack {
+                        // Section title
+                        HStack {
+                            Text("Prescriptions")
+                                .bold()
+                            Spacer()
+                        }
+                        VStack {
+                            
+                            // Header titles
+                            HStack {
+                                Text("Date")
+                                    .foregroundColor(Color("Emerald"))
+                                Spacer()
+                                Text("Articles")
+                                    .foregroundColor(Color("Emerald"))
+                            }
+                            
+                            List(patientVM.prescriptions.indices, id: \.self) { index in
+                                let prescription = patientVM.prescriptions[index]
+                                
+                                Button(action: {
+                                    selectedPrescription = prescription
+                                }) {
+                                    HStack {
+                                        Text("\(formattedDate(prescription.startAt))")
+                                            .foregroundColor(.black)
+                                        Spacer()
+                                        Text("\(prescription.medications.count)")
+                                            .foregroundColor(.black)
+                                        Image(systemName: "pills.fill")
+                                            .foregroundColor(.black)
+                                    }
+                                }
+                                .listRowBackground(index % 2 == 0 ? Color("EmeraldLight") : Color.white)
+                            }
+                            // modal edition prescription
+                            .sheet(item: $selectedPrescription) { selectedPrescription in
+                                EditPrescriptionView(prescription: selectedPrescription)
+                            }
+                            
+                            Button(action: {
+                                // Affichage de la modal
+                                isNewPrescriptionPresented.toggle()
+                            }, label: {
+                                HStack {
+                                    Image(systemName: "plus.circle.fill")
+                                        .foregroundColor(.white)
+                                    Text("Ajouter")
+                                        .bold()
+                                        .foregroundColor(.white)
+                                        .customBodyBold()
+                                    
+                                }
+                            })
+                            .padding(10)
+                            .background(Color("Clementine"))
+                            .cornerRadius(10)
+                        }
+                        .padding(10)
+                        .background(Color("LightGrey"))
+                        .cornerRadius(10)
+                    }
+                    
                     Spacer()
-                    Text("\(formattedDate(stay.entranceDate))")
-                    Spacer()
-                    Text("\(formattedDate(stay.dischargeDate))")
-                    Spacer()
-                    Text(stay.reason)
+                    
+                    // MARK: - Comments
+                    VStack {
+                        // Section title
+                        HStack {
+                            Text("Commentaires médicaux")
+                                .bold()
+                            Spacer()
+                        }
+                        VStack {
+                            
+                            HStack {
+                                Text("Date")
+                                    .foregroundColor(Color("Emerald"))
+                                Spacer()
+                                Text("Commentaire")
+                                    .foregroundColor(Color("Emerald"))
+                            }
+                            
+                            List(patientVM.comments.indices, id: \.self) { index in
+                                let comment = patientVM.comments[index]
+                                
+                                Button(action: {
+                                    selectedComment = comment
+                                }) {
+                                    HStack {
+                                        Text("\(formattedDate(comment.createAt))")
+                                            .foregroundColor(.black)
+                                        Text("\(comment.content)")
+                                            .foregroundColor(.black)
+                                            .lineLimit(1)
+                                    }
+                                }
+                                .listRowBackground(index % 2 == 0 ? Color("EmeraldLight") : Color.white)
+                            }
+                            // modal edition comment
+                            .sheet(item: $selectedComment) { selectedComment in
+                                EditCommentView(comment: selectedComment)
+                            }
+                            Button(action: {
+                                // Affichage de la modal
+                                isNewCommentPresented.toggle()
+                            }, label: {
+                                HStack {
+                                    Image(systemName: "plus.circle.fill")
+                                        .foregroundColor(.white)
+                                    Text("Ajouter")
+                                        .bold()
+                                        .foregroundColor(.white)
+                                        .customBodyBold()
+                                    
+                                }
+                            })
+                            .padding(10)
+                            .background(Color("Clementine"))
+                            .cornerRadius(10)
+                        }
+                        .padding(10)
+                        .background(Color("LightGrey"))
+                        .cornerRadius(10)
+                    }
                 }
-                .padding()
-                .listRowBackground(index % 2 == 0 ? Color("EmeraldLight") : Color.white)
+                
+                // MARK: - Old stays
+                // Section title
+                HStack {
+                    Text("Séjour précédent")
+                        .bold()
+                    Spacer()
+                }
+                
+                VStack {
+                    
+                    HStack {
+                        Text("Service")
+                            .foregroundColor(Color("Emerald"))
+                        Spacer()
+                        Text("Entrée")
+                            .foregroundColor(Color("Emerald"))
+                        Spacer()
+                        Text("Sortie")
+                            .foregroundColor(Color("Emerald"))
+                        Spacer()
+                        Text("Raison")
+                            .foregroundColor(Color("Emerald"))
+                    }
+                    
+                    List(patientVM.oldStays.indices, id: \.self) { index in
+                        let stay = patientVM.oldStays[index]
+                        HStack {
+                            Text(stay.service.name)
+                            Spacer()
+                            Text("\(formattedDate(stay.entranceDate))")
+                            Spacer()
+                            Text("\(formattedDate(stay.dischargeDate))")
+                            Spacer()
+                            Text(stay.reason)
+                                .lineLimit(1)
+                        }
+                        .listRowBackground(index % 2 == 0 ? Color("EmeraldLight") : Color.white)
+                    }
+                }
+                .padding(10)
+                .background(Color("LightGrey"))
+                .cornerRadius(10)
+                
+                Spacer()
             }
+            .onAppear{
+                loadPatient()
+            }
+            // Présentation des modals
+            .sheet(isPresented: $isNewPrescriptionPresented) {
+                NewPrescriptionView(patientVM: patientVM)
+            }
+            .sheet(isPresented: $isNewCommentPresented) {
+                NewCommentView(patientVM: patientVM)
+            }
+            .navigationBarBackButtonHidden(true)
+            .padding(20)
+            
         }
-        .onAppear{
-            loadPatient()
-        }
-        // Présentation des modals
-        .sheet(isPresented: $isNewPrescriptionPresented) {
-            NewPrescriptionView(patientVM: patientVM)
-        }
-        .sheet(isPresented: $isNewCommentPresented) {
-            NewCommentView(patientVM: patientVM)
-        }
-        .navigationBarBackButtonHidden(true)
     }
+    
+    // MARK: - Methods
     private func loadPatient(){
-        print("load patient")
+        
         patientVM.loadPatient(patient: self.patient){
             loadData()
         }
     }
     private func loadData(){ // TODO - déplacé ce code dans MV
-        print("load data")
         
         // On récupère le séjour en cours
         patientVM.getCurrentStay() { result in
@@ -213,7 +329,7 @@ struct PatientDetailView: View {
     
     private func formattedDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMM. yyyy"
+        dateFormatter.dateFormat = "dd MMM yyyy"
         return dateFormatter.string(from: date)
     }
 }
