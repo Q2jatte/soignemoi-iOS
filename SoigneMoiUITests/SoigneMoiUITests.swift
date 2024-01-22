@@ -134,8 +134,8 @@ final class SoigneMoiUITests: XCTestCase {
         let collectionViewsQuery = app.collectionViews
         collectionViewsQuery.buttons.element(boundBy: 0).tap()
         
-        app.collectionViews
-            .containing(.other, identifier: "Vertical scroll bar, 5 pages")
+        collectionViewsQuery
+            .containing(.other, identifier: "Vertical scroll bar, 6 pages")
             .children(matching: .cell)
             .element(boundBy: 0)
             .buttons.element(boundBy: 0)
@@ -149,16 +149,15 @@ final class SoigneMoiUITests: XCTestCase {
         app.buttons["Enregistrer"].tap()
         sleep(5)
         let alert = app.alerts["Prescription modifiée 👍"]
-        XCTAssertTrue(alert.exists)
-                                
+        XCTAssertTrue(alert.exists)                                
     }
-/*
-    func testLaunchPerformance() throws {
+
+    func test_LaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
             // This measures how long it takes to launch your application.
             measure(metrics: [XCTApplicationLaunchMetric()]) {
                 XCUIApplication().launch()
             }
         }
-    }*/
+    }
 }

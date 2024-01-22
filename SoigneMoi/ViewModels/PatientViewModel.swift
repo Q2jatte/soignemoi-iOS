@@ -8,6 +8,7 @@
 import SwiftUI
 import Foundation
 
+/** ViewModel pour la gestion des données liées aux patients, incluant la recherche, les séjours, les prescriptions et les commentaires médicaux. */
 class PatientViewModel: ObservableObject {
     
     // MARK: - Properties
@@ -29,7 +30,14 @@ class PatientViewModel: ObservableObject {
     
     // MARK: - Méthodes
     
-    // search patient by name
+    /**
+     Recherche des patients par nom.
+     
+     - Parameters:
+        - partial: Partie du nom du patient à rechercher.
+        - completion: Closure appelée une fois la recherche terminée.
+            - Result: Tableau de patients ou erreur.
+     */
     func search(partial: String, completion: @escaping (Result<[Patient], Error>) -> Void) {
         api.searchPatientRequest(partial: partial) { result in
             
@@ -52,7 +60,13 @@ class PatientViewModel: ObservableObject {
         }
     }
     
-    // Récupèration des séjours
+    /**
+     Récupération des séjours actuels du patient.
+     
+     - Parameters:
+        - completion: Closure appelée une fois la récupération terminée.
+            - Result: Tableau de séjours actuels ou erreur.
+     */
     func getCurrentStay(completion: @escaping (Result<[Stay], Error>) -> Void) {
         
         if let id = self.patientId {
@@ -81,6 +95,13 @@ class PatientViewModel: ObservableObject {
         }
     }
     
+    /**
+     Récupération des anciens séjours du patient.
+     
+     - Parameters:
+        - completion: Closure appelée une fois la récupération terminée.
+            - Result: Tableau de séjours anciens ou erreur.
+     */
     func getOldStays(completion: @escaping (Result<[Stay], Error>) -> Void) {
         
         if let id = self.patientId {
@@ -109,7 +130,13 @@ class PatientViewModel: ObservableObject {
         }
     }
     
-    // Récupèration des prescriptions
+    /**
+     Récupération des prescriptions du patient.
+     
+     - Parameters:
+        - completion: Closure appelée une fois la récupération terminée.
+            - Result: Tableau de prescriptions ou erreur.
+     */
     func getPrescriptions(completion: @escaping (Result<[Prescription], Error>) -> Void) {
         
         if let id = self.patientId {
@@ -138,7 +165,13 @@ class PatientViewModel: ObservableObject {
         }
     }
     
-    // Récupèration des commentaires médicaux
+    /**
+     Récupération des commentaires médicaux du patient.
+     
+     - Parameters:
+        - completion: Closure appelée une fois la récupération terminée.
+            - Result: Tableau de commentaires ou erreur.
+     */
     func getComments(completion: @escaping (Result<[Comment], Error>) -> Void) {
         
         if let id = self.patientId {
@@ -167,7 +200,15 @@ class PatientViewModel: ObservableObject {
         }
     }
     
-    // Création d'une nouvelle prescription avec ces traitements
+    /**
+     Création d'une nouvelle prescription pour le patient.
+     
+     - Parameters:
+        - endAt: Date de fin de la prescription.
+        - medications: Tableau de médicaments associés à la prescription.
+        - completion: Closure appelée une fois la création terminée.
+            - Result: Message de succès ou erreur.
+     */
     func createNewPrescription(endAt: Date, medications: [Medication], completion: @escaping (Result<String, Error>) -> Void) {
         
         // On vérifie les optionnelles
@@ -201,7 +242,14 @@ class PatientViewModel: ObservableObject {
         }
     }
     
-    // update endDate prescription
+    /**
+     Mise à jour de la date de fin d'une prescription.
+     
+     - Parameters:
+        - date: Nouvelle date de fin.
+        - completion: Closure appelée une fois la mise à jour terminée.
+            - Result: Message de succès ou erreur.
+     */
     func updatePrescription(date: NewDate, completion: @escaping (Result<String, Error>) -> Void){
         
         // on envoie
@@ -222,7 +270,15 @@ class PatientViewModel: ObservableObject {
         }
         
     }
-    // Création d'un nouveau commentaire
+    
+    /**
+     Création d'un nouveau commentaire médical pour le patient.
+     
+     - Parameters:
+        - comment: Nouveau commentaire médical.
+        - completion: Closure appelée une fois la création terminée.
+            - Result: Message de succès ou erreur.
+     */
     func createNewComment(comment: Comment, completion: @escaping (Result<String, Error>) -> Void) {
         
         // On vérifie les optionnelles
@@ -267,6 +323,13 @@ class PatientViewModel: ObservableObject {
         }
     }
     
+    /**
+     Chargement des informations du patient.
+     
+     - Parameters:
+        - patient: Patient à charger.
+        - completion: Closure appelée une fois le chargement terminé.
+     */
     func loadPatient(patient: Patient, completion: @escaping () -> Void) {
         patientId = patient.id
         firstName = patient.user.firstName

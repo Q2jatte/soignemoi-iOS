@@ -7,42 +7,60 @@
 
 import Foundation
 
-// Utilisateur de l'app
-// Doctor est géré en singleton pattern
+/**
+ Utilisateur de l'application.
+ La classe `ActiveUser` est gérée en singleton pattern.
+*/
 class ActiveUser {
     
+    /// Nom d'utilisateur de l'utilisateur.
     var username: String
-    var password: String // TODO : utiliser SwiftKeychzinWrapper pour le stockage du mot de passe
-    var token: String // token JWT renvoyé par l'API
+    
+    /// Mot de passe de l'utilisateur. (TODO : utiliser SwiftKeychainWrapper pour le stockage du mot de passe)
+    var password: String
+    
+    /// Gestionnaire de token pour l'utilisateur.
+    var tokenManager: TokenManager
+    
+    /// Token d'authentification de l'utilisateur.
+    //var token: String
+    
+    /// Statut d'authentification de l'utilisateur.
     var isAuthenticated: Bool
-    var profile: Profile // profile data
     
+    /// Profil de l'utilisateur.
+    var profile: Profile
     
-    // Instance unique de la classe User (singleton)
+    /// Instance unique de la classe User (singleton).
     static let shared = ActiveUser()
     
-    // Initialisateur privé pour empêcher l'instanciation directe de la classe
+    /// Initialisateur privé pour empêcher l'instanciation directe de la classe.
     private init() {
         // Initialisation des propriétés par défaut si nécessaire
         self.username = ""
         self.password = ""
-        self.token = ""
+        self.tokenManager = TokenManager()
+        //self.token = ""
         self.isAuthenticated = false
         self.profile = Profile(firstName: "", lastName: "", doctor: DoctorResp(service: Service(name: "")), profileImageName: "")
     }
     
-    // Fonction pour configurer les propriétés de l'utilisateur
+    /**
+     Fonction pour configurer les propriétés de l'utilisateur.
+     
+     - Parameters:
+        - username: Le nom d'utilisateur.
+        - password: Le mot de passe.
+    */
     func configure(username: String, password: String) {
         self.username = username
         self.password = password
     }
-    
-    // Ajouter le token
-    func addToken(token: String) {
-        self.token = token
-    }
 }
 
+/**
+ Structure représentant le profil de l'utilisateur.
+*/
 struct Profile: Codable {
     var firstName: String
     var lastName: String
@@ -50,6 +68,9 @@ struct Profile: Codable {
     var profileImageName: String
 }
 
+/**
+ Structure représentant doctor dans le profil.
+*/
 struct DoctorResp: Codable {
     var service: Service
 }

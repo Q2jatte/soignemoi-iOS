@@ -7,7 +7,26 @@
 
 import SwiftUI
 
+/**
+ Vue de l'en-tête du tableau de bord, affichant des informations telles que le titre, la date actuelle et le nombre de patients dans le service.
+
+ - Body:
+    - Utilise un dégradé de fond avec des éléments visuels pour le titre, la date et le nombre de patients.
+
+ - Méthodes:
+    - `formattedDate`: Méthode pour formater la date actuelle.
+
+ - Widget Iconographique:
+    - Affiche des icônes pour la date et le nombre de patients.
+
+ - Contenu de l'en-tête:
+    - Titre du tableau de bord.
+    - Date actuelle.
+    - Nombre de patients dans le service de cardiologie.
+*/
 struct DashboardHeaderView: View {
+    
+    // MARK: - Body
     var body: some View {
         ZStack {
             // dégradé de fond
@@ -46,9 +65,7 @@ struct DashboardHeaderView: View {
                         }
                         Text("9 patients en cardiologie")
                     }
-                    
                     Spacer() // pour l'alignement en haut
-                    
                     
                 }
                 .padding()
@@ -67,8 +84,12 @@ struct DashboardHeaderView: View {
         )
     }
     
-    // MARK: - Méthodes
-    
+    // MARK: - Methods
+    /**
+     Méthode pour formater la date actuelle.
+
+     - Returns: Une chaîne de caractères représentant la date formatée.
+     */
     func formattedDate() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "E. dd MMM. yyyy"

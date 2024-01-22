@@ -13,7 +13,6 @@
 		271AB9D92B343D190093DD2E /* Stay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271AB9D82B343D190093DD2E /* Stay.swift */; };
 		271AB9DB2B34404B0093DD2E /* PatientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271AB9DA2B34404B0093DD2E /* PatientDetailView.swift */; };
 		2723D3E52B2706320033838B /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2723D3E42B2706320033838B /* MenuView.swift */; };
-		2727BEB82B56D5EF00811F4D /* button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2727BEB72B56D5EF00811F4D /* button.swift */; };
 		2799F6202B58327C00D042B3 /* EditPrescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2799F61F2B58327C00D042B3 /* EditPrescriptionView.swift */; };
 		27A315792B1F63B9004EA1A6 /* SoigneMoiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A315782B1F63B9004EA1A6 /* SoigneMoiApp.swift */; };
 		27A3157D2B1F63BA004EA1A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27A3157C2B1F63BA004EA1A6 /* Assets.xcassets */; };
@@ -46,6 +45,15 @@
 		27F704C02B2CBBFC0083E78F /* PatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F704BF2B2CBBFC0083E78F /* PatientView.swift */; };
 		27F704C82B2CCFA10083E78F /* CustomTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F704C72B2CCFA10083E78F /* CustomTextStyle.swift */; };
 		27F704CA2B2CE2E00083E78F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F704C92B2CE2E00083E78F /* MainView.swift */; };
+		27F9C7972B5E6FF90026188B /* JWTPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F9C7962B5E6FF90026188B /* JWTPayload.swift */; };
+		27F9C7992B5E75DC0026188B /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F9C7982B5E75DC0026188B /* TokenManager.swift */; };
+		27F9C79A2B5E87DC0026188B /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F9C7982B5E75DC0026188B /* TokenManager.swift */; };
+		27F9C79B2B5E87EC0026188B /* JWTPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F9C7962B5E6FF90026188B /* JWTPayload.swift */; };
+		27F9C79C2B5E87EF0026188B /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A315A72B1F7755004EA1A6 /* Api.swift */; };
+		27F9C79D2B5E880E0026188B /* Stay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271AB9D82B343D190093DD2E /* Stay.swift */; };
+		27F9C79E2B5E88240026188B /* Prescription + Medication + NewDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271AB9D22B3420840093DD2E /* Prescription + Medication + NewDate.swift */; };
+		27F9C79F2B5E883D0026188B /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271AB9D42B34217C0093DD2E /* DateFormatter.swift */; };
+		27F9C7A02B5E88590026188B /* Responses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F704B62B2CA64B0083E78F /* Responses.swift */; };
 		27FF21322B35779900FA4351 /* NewPrescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FF21312B35779900FA4351 /* NewPrescriptionView.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,7 +81,6 @@
 		271AB9D82B343D190093DD2E /* Stay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stay.swift; sourceTree = "<group>"; };
 		271AB9DA2B34404B0093DD2E /* PatientDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientDetailView.swift; sourceTree = "<group>"; };
 		2723D3E42B2706320033838B /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
-		2727BEB72B56D5EF00811F4D /* button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = button.swift; sourceTree = "<group>"; };
 		2799F61F2B58327C00D042B3 /* EditPrescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPrescriptionView.swift; sourceTree = "<group>"; };
 		27A315752B1F63B9004EA1A6 /* SoigneMoi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoigneMoi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27A315782B1F63B9004EA1A6 /* SoigneMoiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoigneMoiApp.swift; sourceTree = "<group>"; };
@@ -106,6 +113,8 @@
 		27F704BF2B2CBBFC0083E78F /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
 		27F704C72B2CCFA10083E78F /* CustomTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextStyle.swift; sourceTree = "<group>"; };
 		27F704C92B2CE2E00083E78F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		27F9C7962B5E6FF90026188B /* JWTPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWTPayload.swift; sourceTree = "<group>"; };
+		27F9C7982B5E75DC0026188B /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		27FF21312B35779900FA4351 /* NewPrescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPrescriptionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -205,6 +214,8 @@
 				271AB9D42B34217C0093DD2E /* DateFormatter.swift */,
 				271AB9D62B3426C70093DD2E /* Doctor + Comment.swift */,
 				271AB9D82B343D190093DD2E /* Stay.swift */,
+				27F9C7962B5E6FF90026188B /* JWTPayload.swift */,
+				27F9C7982B5E75DC0026188B /* TokenManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -219,7 +230,6 @@
 				2723D3E42B2706320033838B /* MenuView.swift */,
 				27F704BA2B2CA9F30083E78F /* ProfileView.swift */,
 				27F704C92B2CE2E00083E78F /* MainView.swift */,
-				2727BEB72B56D5EF00811F4D /* button.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -423,7 +433,8 @@
 				27A315AA2B1F79E7004EA1A6 /* ActiveUser + Profile.swift in Sources */,
 				27FF21322B35779900FA4351 /* NewPrescriptionView.swift in Sources */,
 				27A315792B1F63B9004EA1A6 /* SoigneMoiApp.swift in Sources */,
-				2727BEB82B56D5EF00811F4D /* button.swift in Sources */,
+				27F9C7992B5E75DC0026188B /* TokenManager.swift in Sources */,
+				27F9C7972B5E6FF90026188B /* JWTPayload.swift in Sources */,
 				27F704CA2B2CE2E00083E78F /* MainView.swift in Sources */,
 				271AB9D92B343D190093DD2E /* Stay.swift in Sources */,
 				27F704C02B2CBBFC0083E78F /* PatientView.swift in Sources */,
@@ -453,10 +464,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27F9C7A02B5E88590026188B /* Responses.swift in Sources */,
+				27F9C79D2B5E880E0026188B /* Stay.swift in Sources */,
 				27A315942B1F63BB004EA1A6 /* SoigneMoiUITests.swift in Sources */,
+				27F9C79B2B5E87EC0026188B /* JWTPayload.swift in Sources */,
+				27F9C79A2B5E87DC0026188B /* TokenManager.swift in Sources */,
 				27A315962B1F63BB004EA1A6 /* SoigneMoiUITestsLaunchTests.swift in Sources */,
+				27F9C79F2B5E883D0026188B /* DateFormatter.swift in Sources */,
 				27D5E8A12B5A93AC0060157D /* Patient + User + VisitData.swift in Sources */,
 				27D5E8A02B5A93940060157D /* Doctor + Comment.swift in Sources */,
+				27F9C79E2B5E88240026188B /* Prescription + Medication + NewDate.swift in Sources */,
+				27F9C79C2B5E87EF0026188B /* Api.swift in Sources */,
 				27D5E89F2B5A93550060157D /* ActiveUser + Profile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

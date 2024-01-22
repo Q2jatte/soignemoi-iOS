@@ -7,13 +7,29 @@
 
 import SwiftUI
 
+/**
+ En-tête de la vue du patient affichant les détails généraux du patient.
+
+ Cette vue est responsable de l'affichage de l'en-tête avec le titre "Fiche patient" et d'autres détails généraux du patient tels que le nom et le prénom.
+
+ - Properties:
+    - patientVM: Objet `PatientViewModel` observé pour la gestion des données liées aux patients.
+
+ - Body:
+    - Utilise un dégradé de fond et une image en arrière-plan pour une présentation visuelle.
+    - Affiche le titre "Fiche patient" avec une mise en forme personnalisée.
+    - Affiche un widget avec l'image d'une personne et les informations du patient (nom et prénom) s'il y a un patient sélectionné.
+
+ Cette vue fait partie de la structure générale de la vue du patient (`PatientView`) et contribue à la présentation visuelle de l'interface utilisateur de la fiche patient.
+ */
 struct PatientHeaderView: View {
     
+    // MARK: - Properties
     @ObservedObject var patientVM: PatientViewModel
     
     var body: some View {
         ZStack {
-            // dégradé de fond
+            // Dégradé de fond
             LinearGradient(gradient: Gradient(colors: [Color("Emerald"), Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .edgesIgnoringSafeArea(.all)
             HStack{
@@ -40,9 +56,7 @@ struct PatientHeaderView: View {
                             Text(patientVM.lastName ?? "lastNameError")
                         }
                     }
-                    
                     Spacer() // pour l'alignement en haut
-                    
                 }
                 .padding()
                 

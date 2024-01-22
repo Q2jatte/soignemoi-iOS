@@ -7,18 +7,38 @@
 
 import SwiftUI
 
+/**
+ Vue du contenu du tableau de bord, affichant les informations sur les visites du jour, y compris le nombre de patients, leurs noms et les dates d'entrée et de sortie.
+
+ - Body:
+    - Utilise une liste pour afficher les visites du jour avec les détails du patient.
+    - Affiche également une image d'arrière-plan représentant un hôpital.
+
+ - Méthodes:
+    - `loadData`: Méthode pour charger les données des patients.
+
+ - Widget Iconographique:
+    - Utilise l'icône "person.fill" pour représenter les patients.
+    - Utilise des icônes système pour la navigation et la présentation des données.
+
+ - Contenu du tableau de bord:
+    - Visites du jour avec le nombre de patients, leurs noms et les dates d'entrée et de sortie.
+    - Affiche un message de chargement en attendant que les données soient récupérées.
+
+ - Paramètres:
+    - `dashboardVM`: ViewModel du tableau de bord.
+
+*/
 struct DashboardContentView: View {
     
-    /* MARK: - Properties */
-    
+    // MARK: - Properties
     @State private var selection: VisitData.ID?
-    
     @ObservedObject var dashboardVM = DashboardViewModel()
-    
     @State private var displayDataPatient: Bool = false
     @State private var displayDataPrescriptions: Bool = false
     @State private var displayDataComments: Bool = false
     
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             VStack {
@@ -110,6 +130,9 @@ struct DashboardContentView: View {
     }
     
     // MARK: - Methods
+    /**
+     Méthode pour charger les données des patients.
+    */
     private func loadData() {
         // On récupère les données patients
         dashboardVM.getPatients() { result in
@@ -122,6 +145,12 @@ struct DashboardContentView: View {
         }
     }
     
+    /**
+     Méthode pour formater une date.
+     
+     - Parameter date: La date à formater.
+     - Returns: Une chaîne de caractères représentant la date formatée.
+    */
     private func formattedDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMM. yyyy"

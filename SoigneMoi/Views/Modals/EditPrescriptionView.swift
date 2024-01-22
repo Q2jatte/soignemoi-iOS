@@ -7,8 +7,34 @@
 
 import SwiftUI
 
+/**
+ Vue pour la modification d'une prescription médicale existante.
+
+ - Body:
+    - Utilise un formulaire avec des sections pour afficher les informations du patient, les dates de validité et les traitements de la prescription.
+    - Affiche les informations du patient, la date de création de la prescription et les traitements associés.
+    - Permet de modifier la date de fin de validité de la prescription.
+    - Affiche un bouton pour enregistrer les modifications.
+
+ - Méthodes:
+    - `updatePrescription`: Met à jour la prescription médicale avec la nouvelle date de fin de validité.
+    - `formattedDate`: Formate une date pour l'affichage.
+
+ - Alertes:
+    - Affiche une alerte en cas de succès ou d'échec lors de la mise à jour de la prescription.
+
+ - Paramètres:
+    - `presentationMode`: Environnement pour la gestion du mode de présentation.
+    - `prescription`: Prescription médicale à modifier.
+    - `endDate`: Nouvelle date de fin de validité de la prescription.
+    - `showAlert`: Booléen pour afficher ou masquer l'alerte.
+    - `titleAlert`: Titre de l'alerte.
+    - `messageAlert`: Message de l'alerte.
+    - `enableButton`: Booléen pour activer/désactiver le bouton d'enregistrement.
+*/
 struct EditPrescriptionView: View {
-    /* MARK - Propriétés*/
+    
+    // MARK - Properties
     @Environment(\.presentationMode) var presentationMode
     
     // La source de vérité
@@ -24,6 +50,7 @@ struct EditPrescriptionView: View {
     // Etat du bouton d'enregistrement
     @State private var enableButton = false
     
+    // MARK - Body
     var body: some View {
         
         VStack {
@@ -105,6 +132,10 @@ struct EditPrescriptionView: View {
         .background(Color("LightGrey"))
     }
     
+    // MARK - Methods
+    /**
+     Met à jour la prescription médicale avec la nouvelle date de fin de validité.
+    */
     private func updatePrescription() {
         let patientVM = PatientViewModel()
         if let id = prescription.id {
@@ -123,6 +154,12 @@ struct EditPrescriptionView: View {
         }
     }
     
+    /**
+     Formate une date pour l'affichage.
+     
+     - Parameter date: La date à formater.
+     - Returns: Une chaîne de caractères représentant la date formatée.
+    */
     private func formattedDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
@@ -130,14 +167,3 @@ struct EditPrescriptionView: View {
         return dateFormatter.string(from: date)
     }
 }
-
-/*
-struct EditPrescriptionView_Previews: PreviewProvider {
-    
-    @State static var prescription = Prescription()
-    
-    static var previews: some View {
-        NewPrescriptionView()
-    }
-}*/
-

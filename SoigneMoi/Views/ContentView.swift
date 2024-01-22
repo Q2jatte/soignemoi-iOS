@@ -7,6 +7,26 @@
 
 import SwiftUI
 
+/**
+ Vue principale de l'application, contenant le tableau de bord et le menu.
+
+ Cette vue superpose le menu et le contenu principal. Le menu peut être redimensionné entre un état réduit et étendu, et permet de contrôler la visibilité du tableau de bord.
+
+ - Parameters:
+    - dashboardVM: ViewModel responsable de la gestion des données du tableau de bord.
+    - menuVM: ViewModel responsable de la gestion des données du menu.
+
+ - Constants:
+    - buttonWidth: Largeur du bouton de contrôle du menu.
+
+ - Body:
+    - Utilise un ZStack pour superposer le menu et le contenu principal.
+    - Le menu est placé dans une VStack, contenant le logo, la vue de profil, le menu, un bouton de contrôle pour redimensionner le menu, et un espace pour remplir le reste de la hauteur.
+    - Le contenu principal est contenu dans une VStack qui contient la vue principale du tableau de bord.
+    - Le bouton de contrôle du menu permet de redimensionner le menu et contrôle la visibilité du tableau de bord.
+
+ Cette vue utilise des State et des ObservedObjects pour suivre les changements d'état des données et mettre à jour l'interface utilisateur en conséquence.
+ */
 struct ContentView: View {   
     
     // MARK: - Properties
@@ -22,6 +42,10 @@ struct ContentView: View {
                 // MARK: - Menu
                 VStack {
                     
+                    HStack {
+                        
+                    }
+                    
                     if dashboardVM.isReduced {
                         Image("min-logo-black")
                             .frame(height: 195)
@@ -33,11 +57,33 @@ struct ContentView: View {
                             .frame(height: 195)
                     }
                     
-                    ProfileView(isReduced: $dashboardVM.isReduced)
+                    ProfileView(isReduced: $dashboardVM.isReduced) // Vue affichant le profil utilisateur
                     
-                    MenuView(selectedCategoryId: $dashboardVM.selectedCategoryId, isReduced: $dashboardVM.isReduced, menuVM: menuVM)
+                    MenuView(selectedCategoryId: $dashboardVM.selectedCategoryId, isReduced: $dashboardVM.isReduced, menuVM: menuVM) // Vue affichant le menu de gauche sous le profil
                     
                     Spacer()
+                    
+                    // MARK: - control button
+                    // Resize menuView
+                    Button(action: {
+                        if dashboardVM.isReduced {
+                            dashboardVM.menuWidth = 300
+                        } else {
+                            dashboardVM.menuWidth = 100
+                        }
+                        dashboardVM.isReduced.toggle()
+                        
+                    }, label: {
+                        if !dashboardVM.isReduced {
+                            Image(systemName: "chevron.left.circle")
+                                .font(.largeTitle)
+                                .foregroundColor(.white)
+                        } else {
+                            Image(systemName: "chevron.right.circle")
+                                .font(.largeTitle)
+                                .foregroundColor(.white)
+                        }
+                    })
                 }
                 .frame(maxWidth: dashboardVM.menuWidth)
                 .background(Color("LightBlack"))
@@ -48,37 +94,7 @@ struct ContentView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            
-            // MARK: - control button
-            Button(action: {
-                if dashboardVM.isReduced {
-                    dashboardVM.menuWidth = 300
-                } else {
-                    dashboardVM.menuWidth = 100
-                }
-                dashboardVM.isReduced.toggle()
-                
-            }, label: {
-                if !dashboardVM.isReduced {
-                    Image(systemName: "chevron.left")
-                        .font(.largeTitle)
-                        .foregroundColor(Color("LightBlack"))
-                } else {
-                    Image(systemName: "chevron.right")
-                        .font(.largeTitle)
-                        .foregroundColor(Color("LightBlack"))
-                }
-            })
-            .frame(width: buttonWidth, height: buttonWidth)
-            .background(Color.white)
-            .clipShape(Circle())
-            .overlay(
-                Circle().stroke(Color("LightBlack"), lineWidth: 2)
-            )
-            .offset(x: dashboardVM.menuWidth - (buttonWidth / 2), y: 0)
-            
         }
-        
     }
 }
 

@@ -65,7 +65,7 @@ class Api {
     static let commentURL = baseURL.appendingPathComponent("/api/comment")
     static let profileImageURL = baseURL.appendingPathComponent("/upload/images")
     
-    // will use session for Mocker Test
+    // Seeiosn sera utilisé pour les tests avec Mocker
     private let session: URLSession
 
     init(session: URLSession = URLSession.shared) {
@@ -74,7 +74,16 @@ class Api {
     
     // MARK: - Get
     
-    // GET PROFILE
+    /**
+     Récupère le profil de l'utilisateur actuellement connecté.
+    
+     - Parameter completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un objet `Profile` en cas de succès, ou une erreur en cas d'échec.
+     - Throws : Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+     */
     func getProfileRequest(completion: @escaping (Result<Profile, Error>) -> Void) {
         
         
@@ -83,7 +92,8 @@ class Api {
         // Création de la requête
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+        let token = ActiveUser.shared.tokenManager.getToken()
+        request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
         
         // Création de la tâche URLSession pour envoyer la requête
         let task = session.dataTask(with: request) { (data, response, error) in
@@ -120,7 +130,16 @@ class Api {
         task.resume()
     }
     
-    // GET PATIENT - Retourne les patients du jour
+    /**
+     Récupère les données des visites pour un patient.
+     
+     - Parameter completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un tableau d'objets `VisitData` en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
     func getPatientRequest(completion: @escaping (Result<[VisitData], Error>) -> Void) {
         
         let url = Api.getPatientURL
@@ -128,7 +147,8 @@ class Api {
         // Création de la requête
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+        let token = ActiveUser.shared.tokenManager.getToken()
+        request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
         
         
         // Création de la tâche URLSession pour envoyer la requête
@@ -146,10 +166,6 @@ class Api {
                 case 200:
                     if let responseData = data {
                         do {
-                            // Désérialisation du JSONen [Patient]
-                            //let json = try JSONSerialization.jsonObject(with: responseData, options: []) as? [Patient]
-                            //completion(.success(json!))
-                            
                             let jsonDecoder = JSONDecoder()
                             jsonDecoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
                             let patients = try jsonDecoder.decode([VisitData].self, from: responseData)
@@ -172,7 +188,19 @@ class Api {
         task.resume()
     }
     
-    // GET STAYS - Retourne les séjours : en cours, à venir, ancient et tous en fonction de l'id patient
+    /**
+     Retourne les séjours : en cours, à venir, ancien et tous en fonction de l'ID du patient et du statut spécifié.
+     
+     - Parameters:
+        - id: L'identifiant du patient pour lequel récupérer les séjours.
+        - status: Le statut des séjours à récupérer (en cours, à venir, ancien, tous).
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un tableau d'objets `Stay` en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+     */
     func getStaysByPatientAndStatus(id: Int, status: String, completion: @escaping (Result<[Stay], Error>) -> Void) {
         
         // Fabrication de l'URL avec id et status
@@ -184,7 +212,8 @@ class Api {
         // Création de la requête
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+        let token = ActiveUser.shared.tokenManager.getToken()
+        request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
         
         // Création de la tâche URLSession pour envoyer la requête
         let task = session.dataTask(with: request) { (data, response, error) in
@@ -228,7 +257,18 @@ class Api {
     }
     
     
-    // GET PRESCRIPTIONS - Retourne toutes les prescriptions d'un patient
+    /**
+     Retourne toutes les prescriptions d'un patient.
+
+     - Parameters:
+        - id: L'identifiant du patient pour lequel récupérer les prescriptions.
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un tableau d'objets `Prescription` en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
     func getPrescriptionsForOnePatient(id: Int, completion: @escaping (Result<[Prescription], Error>) -> Void) {
         
         // Fabrication de l'URL avec id
@@ -240,7 +280,8 @@ class Api {
         // Création de la requête
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+        let token = ActiveUser.shared.tokenManager.getToken()
+        request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
         
         
         // Création de la tâche URLSession pour envoyer la requête
@@ -282,7 +323,18 @@ class Api {
         task.resume()
     }
     
-    // GET COMMENTS - Retourne tout les commentaires d'un patient
+    /**
+     Retourne tous les commentaires d'un patient.
+     
+     - Parameters:
+        - id: L'identifiant du patient pour lequel récupérer les commentaires.
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un tableau d'objets `Comment` en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
     func getcommentsForOnePatient(id: Int, completion: @escaping (Result<[Comment], Error>) -> Void) {
         
         // Fabrication de l'URL avec id
@@ -294,7 +346,8 @@ class Api {
         // Création de la requête
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+        let token = ActiveUser.shared.tokenManager.getToken()
+        request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
         
         // Création de la tâche URLSession pour envoyer la requête
         let task = session.dataTask(with: request) { (data, response, error) in
@@ -312,7 +365,6 @@ class Api {
                     if let responseData = data {
                         do {
                             // Désérialisation du JSON en [Comment] en intégrant le bon format de date
-                                                        
                             let jsonDecoder = JSONDecoder()
                             jsonDecoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
                             let comments = try jsonDecoder.decode([Comment].self, from: responseData)
@@ -337,7 +389,19 @@ class Api {
     
     // MARK: - Post
     
-    // LOGIN
+    /**
+     LOGIN - Authentification de l'utilisateur en envoyant une requête de connexion.
+     
+     - Parameters:
+        - username: Le nom d'utilisateur pour la connexion.
+        - password: Le mot de passe associé au nom d'utilisateur.
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant le jeton d'authentification en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
     func sendLoginRequest(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
         
         
@@ -397,7 +461,18 @@ class Api {
         
     }
     
-    // SEARCH PATIENT - Retourne les patients en fonction des caractères passés
+    /**
+     SEARCH PATIENT - Retourne les patients en fonction des caractères passés.
+     
+     - Parameters:
+        - partial: Les caractères utilisés pour rechercher des patients.
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un tableau d'objets `Patient` en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
     func searchPatientRequest(partial: String, completion: @escaping (Result<[Patient], Error>) -> Void) {
         
         let url = Api.searchPatientURL
@@ -413,7 +488,8 @@ class Api {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = jsonData
-        request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+        let token = ActiveUser.shared.tokenManager.getToken()
+        request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
         
         
         // Création de la tâche URLSession pour envoyer la requête
@@ -453,7 +529,18 @@ class Api {
         task.resume()
     }
     
-    // POST NEW PRESCRIPTION
+    /**
+     POST NEW PRESCRIPTION - Crée une nouvelle prescription en envoyant une requête POST.
+     
+     - Parameters:
+        - prescription: L'objet `Prescription` à créer.
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un message de confirmation en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
     func createNewPrescription(prescription: Prescription, completion: @escaping (Result<String, Error>) -> Void) {
         
         let url = Api.prescriptionURL
@@ -471,7 +558,8 @@ class Api {
             request.httpMethod = "POST"
             request.httpBody = jsonData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+            let token = ActiveUser.shared.tokenManager.getToken()
+            request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
             
             // Création de la tâche URLSession pour envoyer la requête
             let task = session.dataTask(with: request) { (data, response, error) in
@@ -510,7 +598,18 @@ class Api {
         }
     }
     
-    // POST NEW COMMENT
+    /**
+     POST NEW COMMENT - Crée un nouveau commentaire en envoyant une requête POST.
+     
+     - Parameters:
+        - comment: L'objet `Comment` à créer.
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un message de confirmation en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
     func createNewComment(comment: Comment, completion: @escaping (Result<String, Error>) -> Void) {
         
         let url = Api.commentURL
@@ -528,7 +627,8 @@ class Api {
             request.httpMethod = "POST"
             request.httpBody = jsonData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+            let token = ActiveUser.shared.tokenManager.getToken()
+            request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
             
             // Création de la tâche URLSession pour envoyer la requête
             let task = session.dataTask(with: request) { (data, response, error) in
@@ -568,7 +668,18 @@ class Api {
     
     // MARK: - Patch
     
-    // PATCH PRESCRIPTION
+    /**
+     PATCH PRESCRIPTION - Met à jour une prescription existante en envoyant une requête PATCH.
+     
+     - Parameters:
+        - date: L'objet `NewDate` contenant les informations de mise à jour.
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un message de confirmation en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
     func updatePrescription(date: NewDate, completion: @escaping (Result<String, Error>) -> Void) {
         
         // Fabrication de l'URL avec id
@@ -590,7 +701,8 @@ class Api {
             request.httpMethod = "PATCH"
             request.httpBody = jsonData
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("bearer \(ActiveUser.shared.token)", forHTTPHeaderField: "Authorization")
+            let token = ActiveUser.shared.tokenManager.getToken()
+            request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
             
             // Création de la tâche URLSession pour envoyer la requête
             let task = session.dataTask(with: request) { (data, response, error) in

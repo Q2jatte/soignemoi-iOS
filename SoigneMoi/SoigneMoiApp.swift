@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SystemConfiguration
 
 @main
 struct SoigneMoiApp: App {
@@ -16,6 +17,7 @@ struct SoigneMoiApp: App {
         let dashboardVM = DashboardViewModel()
         let menuVM = MenuViewModel()
         
+        /// La fenêtre principale de l'application, affichant la vue de connexion.
         WindowGroup {
             LoginView(loginVM: loginVM, dashboardVM: dashboardVM, menuVM: menuVM)
         }

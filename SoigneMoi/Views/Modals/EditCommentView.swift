@@ -8,11 +8,24 @@
 
 import SwiftUI
 
+/**
+ Vue pour la modification d'un commentaire médical existant (readonly pour le moment)
+
+ - Body:
+    - Utilise un formulaire avec des sections pour afficher les informations du patient et l'avis médical.
+    - Affiche les informations du patient, le titre, la date de rédaction et le contenu du commentaire médical.
+
+ - Méthode:
+    - `formattedDate`: Formate une date pour l'affichage.
+
+ - Paramètres:
+    - `comment`: Commentaire médical à afficher et éventuellement modifier.
+*/
 struct EditCommentView: View {
-    /* MARK - Propriétés*/
-    
+    // MARK - Properties
     var comment:Comment
     
+    // MARK - Body
     var body: some View {
         
         VStack {
@@ -47,6 +60,13 @@ struct EditCommentView: View {
         .background(Color("LightGrey"))
     }
     
+    // MARK - Methods
+    /**
+     Formate une date pour l'affichage.
+     
+     - Parameter date: La date à formater.
+     - Returns: Une chaîne de caractères représentant la date formatée.
+    */
     private func formattedDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long

@@ -7,7 +7,11 @@
 
 import SwiftUI
 
+/**
+ Modificateur de vue pour un titre de header personnalisé.
+ */
 struct CustomHeaderTitle: ViewModifier {
+    
     func body(content: Content) -> some View {
         content
             .font(.system(size: 36))
@@ -15,7 +19,12 @@ struct CustomHeaderTitle: ViewModifier {
             .foregroundColor(.white) // Vous pouvez personnaliser la couleur ici
     }
 }
+
+/**
+ Modificateur de vue pour un titre personnalisé.
+ */
 struct CustomTitle: ViewModifier {
+    
     func body(content: Content) -> some View {
         content
             .font(.system(size: 32))
@@ -23,7 +32,11 @@ struct CustomTitle: ViewModifier {
     }
 }
 
+/**
+ Modificateur de vue pour un titre personnalisé avec une couleur orange.
+ */
 struct CustomTitleOrange: ViewModifier {
+    
     func body(content: Content) -> some View {
         content
             .font(.system(size: 32))
@@ -31,7 +44,11 @@ struct CustomTitleOrange: ViewModifier {
     }
 }
 
+/**
+ Modificateur de vue pour un texte corporel en gras et personnalisé.
+ */
 struct CustomBodyBold: ViewModifier {
+    
     func body(content: Content) -> some View {
         content
             .font(.system(size: 20))
@@ -41,15 +58,23 @@ struct CustomBodyBold: ViewModifier {
 }
 
 extension View {
+    
+    /// Applique le modificateur pour un titre de header personnalisé.
     func customHeaderTitle() -> some View {
-        self.modifier(CustomTitle())
+        self.modifier(CustomHeaderTitle())
     }
+    
+    /// Applique le modificateur pour un titre personnalisé.
     func customTitle() -> some View {
         self.modifier(CustomTitle())
     }
+    
+    /// Applique le modificateur pour un titre personnalisé avec une couleur orange.
     func customTitleOrange() -> some View {
         self.modifier(CustomTitleOrange())
     }
+    
+    /// Applique le modificateur pour un texte corporel en gras et personnalisé.
     func customBodyBold() -> some View {
         self.modifier(CustomBodyBold())
     }

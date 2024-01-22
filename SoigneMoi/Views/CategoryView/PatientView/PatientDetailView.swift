@@ -7,6 +7,33 @@
 
 import SwiftUI
 
+/**
+ Vue détaillée d'un patient, affichant les informations sur les séjours actuels, les séjours précédents, les prescriptions et les commentaires médicaux.
+
+ - Properties:
+    - patient: Objet `Patient` représentant les informations du patient.
+    - patientVM: Objet `PatientViewModel` observé pour la gestion des données liées au patient.
+    - displayCurrentStay: Booléen pour contrôler l'affichage des informations sur le séjour en cours.
+    - displayOldStays: Booléen pour contrôler l'affichage des informations sur les séjours précédents.
+    - displayPrescriptions: Booléen pour contrôler l'affichage des informations sur les prescriptions.
+    - displayComments: Booléen pour contrôler l'affichage des informations sur les commentaires médicaux.
+    - isNewPrescriptionPresented: Booléen pour contrôler la présentation de la vue de création d'une nouvelle prescription.
+    - isNewCommentPresented: Booléen pour contrôler la présentation de la vue de création d'un nouveau commentaire.
+    - selectedPrescription: Objet `Prescription` sélectionné pour l'édition.
+    - selectedComment: Objet `Comment` sélectionné pour l'édition.
+    - selectedStay: Objet `Stay` sélectionné pour l'édition.
+
+ - Body:
+    - Affiche les informations sur le séjour en cours, les séjours précédents, les prescriptions et les commentaires médicaux.
+    - Permet l'édition des prescriptions et des commentaires médicaux via des modales.
+    - Présente des boutons pour ajouter de nouvelles prescriptions et de nouveaux commentaires médicaux.
+    - Les informations sont chargées lors de l'apparition de la vue.
+
+ - Methods:
+    - loadPatient(): Charge les informations du patient à partir de `patientVM`.
+    - loadData(): Charge les données liées au patient (séjours, prescriptions, commentaires).
+    - formattedDate(_:): Formate la date dans le format "dd MMM yyyy".
+*/
 struct PatientDetailView: View {
     
     // MARK: - Properties
@@ -31,21 +58,18 @@ struct PatientDetailView: View {
     @State private var selectedComment: Comment?
     @State private var selectedStay: Stay?
     
-    
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             // Arrays
             VStack {
-                
                 // MARK: - Current stay
                 HStack {
                     Text("Séjour en cours")
                         .bold()
                     Spacer()
                 }
-                
                 VStack {
-                    
                     // header titles
                     HStack {
                         Text("Service")
@@ -85,7 +109,6 @@ struct PatientDetailView: View {
                 .cornerRadius(10)
                 
                 HStack {
-                    
                     // MARK: - Prescriptions
                     VStack {
                         // Section title
@@ -95,7 +118,6 @@ struct PatientDetailView: View {
                             Spacer()
                         }
                         VStack {
-                            
                             // Header titles
                             HStack {
                                 Text("Date")
@@ -104,10 +126,8 @@ struct PatientDetailView: View {
                                 Text("Articles")
                                     .foregroundColor(Color("Emerald"))
                             }
-                            
                             List(patientVM.prescriptions.indices, id: \.self) { index in
                                 let prescription = patientVM.prescriptions[index]
-                                
                                 Button(action: {
                                     selectedPrescription = prescription
                                 }) {
@@ -139,7 +159,6 @@ struct PatientDetailView: View {
                                         .bold()
                                         .foregroundColor(.white)
                                         .customBodyBold()
-                                    
                                 }
                             })
                             .padding(10)
@@ -162,7 +181,6 @@ struct PatientDetailView: View {
                             Spacer()
                         }
                         VStack {
-                            
                             HStack {
                                 Text("Date")
                                     .foregroundColor(Color("Emerald"))
@@ -170,10 +188,8 @@ struct PatientDetailView: View {
                                 Text("Commentaire")
                                     .foregroundColor(Color("Emerald"))
                             }
-                            
                             List(patientVM.comments.indices, id: \.self) { index in
-                                let comment = patientVM.comments[index]
-                                
+                                let comment = patientVM.comments[index]                                
                                 Button(action: {
                                     selectedComment = comment
                                 }) {

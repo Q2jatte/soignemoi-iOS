@@ -179,9 +179,9 @@ final class ModelsTest: XCTestCase {
     // MARK: - ACTIVEUSER TESTS
     
     func test_AddTokenToActiveUser_shouldSetToken(){
-        let expectedToekn = "I am a token JWT"
-        ActiveUser.shared.addToken(token: expectedToekn)
-        XCTAssertEqual(expectedToekn, ActiveUser.shared.token)
+        let expectedToekn = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MDU5MTQ1MDUsImV4cCI6MTcwNTkyMTcwNSwicm9sZXMiOlsiUk9MRV9ET0NUT1IiXSwidXNlcm5hbWUiOiJpLnZhbGVuY2lhQHNvaWduZW1vaS5jb20ifQ.Cm_9svyvDLBWOVYSUflyOM7S99S0EC_j584VGAEGlF2ohUcV37ROwoUuiEgTm6CtvN0vD0OAt9iKB1IX_81OOQSkXZSnPPtYAdze_a6o0prT_ZYG2k9yW95XvGiWhAWkYr7SzUn3PoUWgSZliC9n8WlGkpU5qKYgGFYaI8n-svt45QgVSAneY3V5Y-_rDs4RsnFZni8QgBQp6ZGxmXzZq6HofZogw9SUzaAe6V1UGUCxCBVVrqY456SZlt7SN3U_FuOZh5d5-slrPW803EgZZVDmA_gQqe-aqYP7vPNgczbvDrptP0EqDfKCbTqtYxza6MYYOFnhHT4jUufo1YujhSe9eXREY85A1ValSYVpze9FPAsQGFcj-39xqwfOc0i8MF7L9ZHt8nIBnjykYZgoETn_D50Uk0TP1m8EQkoasPrB1jwDEeph6zDEDezo4leGGHo0TsGd4VKWOJKd5MeyOYIW7SX9OamaS0q21ecKslHOQ_dHGN_9SwC8JuHLCmMvKhsbp702uux6NgsCMg4ea5uplwPm5FljIZOTjkSzswHvpANXAxQylCCnFD3LqGgk2q29W74KFgSp-CaIKddn1bJVpRUSVcaoqwx2EnkXKslRGHkrdoh_PHZxTO6KcrJ1SWrwrDEPtJ-gRRlNR_qb2aDp4pl-R_Cf9H9b5UMi3Y4"
+        ActiveUser.shared.tokenManager.setToken(token: expectedToekn)
+        XCTAssertEqual(expectedToekn, ActiveUser.shared.tokenManager.token)
     }
     
     // MARK: - DATE FORMATTER

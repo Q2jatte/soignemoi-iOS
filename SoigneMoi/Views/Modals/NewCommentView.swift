@@ -7,8 +7,31 @@
 
 import SwiftUI
 
+/**
+ Vue pour créer un nouveau commentaire médical pour un patient.
+
+ - Body:
+    - Utilise un formulaire avec des sections pour saisir les informations du patient et le contenu du commentaire.
+    - Affiche les informations du patient, le titre et le contenu du commentaire.
+    - Affiche un bouton pour enregistrer le commentaire.
+
+ - Méthodes:
+    - `addComment`: Enregistre le nouveau commentaire médical pour le patient.
+    - `formattedDate`: Formate une date pour l'affichage.
+
+ - Alertes:
+    - Affiche une alerte en cas de succès ou d'échec lors de l'enregistrement du commentaire.
+
+ - Paramètres:
+    - `commentTitle`: Titre du commentaire saisi.
+    - `commentContent`: Contenu du commentaire saisi.
+    - `patientVM`: ViewModel du patient.
+    - `showAlert`: Booléen pour afficher ou masquer l'alerte.
+    - `titleAlert`: Titre de l'alerte.
+    - `messageAlert`: Message de l'alerte.
+*/
 struct NewCommentView: View {
-    /* MARK - Propriétés*/
+    // MARK - Properties
     @State private var commentTitle: String = ""
     @State private var commentContent: String = ""
     
@@ -20,6 +43,7 @@ struct NewCommentView: View {
     @State private var titleAlert = ""
     @State private var messageAlert = ""
     
+    // MARK - Body
     var body: some View {
         
         VStack {
@@ -33,8 +57,6 @@ struct NewCommentView: View {
                     TextField("Titre", text: $commentTitle)
                     TextField("Commentaire", text: $commentContent)
                 }
-                
-                
             }
             .alert(isPresented: $showAlert) {
                 Alert(
@@ -62,12 +84,15 @@ struct NewCommentView: View {
             .background(Color("Emerald"))
             .cornerRadius(10)
             
-            
             Spacer()
         }
         .background(Color("LightGrey"))
     }
     
+    // MARK - Methods
+    /**
+     Enregistre le nouveau commentaire médical pour le patient.
+    */
     private func addComment() {
         patientVM.createNewComment(comment: Comment(title: commentTitle, content: commentContent, createAt: Date())){ result in
             switch result {
@@ -83,6 +108,12 @@ struct NewCommentView: View {
         }
     }
     
+    /**
+     Formate une date pour l'affichage.
+     
+     - Parameter date: La date à formater.
+     - Returns: Une chaîne de caractères représentant la date formatée.
+    */
     private func formattedDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short

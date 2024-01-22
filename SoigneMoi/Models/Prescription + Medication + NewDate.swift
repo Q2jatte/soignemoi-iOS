@@ -7,22 +7,53 @@
 
 import Foundation
 
-// Prescription avec tableau des médicaments associés
-struct Prescription : Codable, Identifiable {
+/**
+ Structure représentant une prescription avec un tableau de médicaments associés.
+ Conforme aux protocoles Codable et Identifiable.
+ */
+struct Prescription: Codable, Identifiable {
+    
+    /// Identifiant unique de la prescription.
     var id: Int?
+    
+    /// Date de début de la prescription.
     var startAt: Date
+    
+    /// Date de fin de la prescription.
     var endAt: Date
+    
+    /// Tableau des médicaments associés à la prescription.
     var medications: [Medication]
+    
+    /// Patient associé à la prescription.
     var patient: Patient?
 }
 
-struct Medication : Codable, Identifiable {
+/**
+ Structure représentant un médicament.
+ Conforme aux protocoles Codable et Identifiable.
+ */
+struct Medication: Codable, Identifiable {
+    
+    /// Identifiant unique du médicament.
     var id: Int?
+    
+    /// Nom du médicament.
     var name: String
+    
+    /// Dosage du médicament.
     var dosage: String
 }
 
-struct NewDate : Codable {
+/**
+ Structure représentant une nouvelle date (modification de prescription)
+ Conforme au protocole Codable.
+ */
+struct NewDate: Codable {
+    
+    /// Identifiant associé à la nouvelle date.
     var id: Int
+    
+    /// La nouvelle date.
     var date: Date
 }
