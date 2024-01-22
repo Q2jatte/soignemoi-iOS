@@ -148,7 +148,7 @@ struct PatientDetailView: View {
                             }
                             // modal edition prescription
                             .sheet(item: $selectedPrescription) { selectedPrescription in
-                                EditPrescriptionView(prescription: selectedPrescription)
+                                EditPrescriptionView(patientVM: patientVM, prescription: selectedPrescription)
                             }
                             
                             Button(action: {
@@ -199,7 +199,7 @@ struct PatientDetailView: View {
                                     HStack {
                                         Text("\(formattedDate(comment.createAt))")
                                             .foregroundColor(.black)
-                                        Text("\(comment.content)")
+                                        Text("\(comment.title)")
                                             .foregroundColor(.black)
                                             .lineLimit(1)
                                     }
@@ -304,9 +304,10 @@ struct PatientDetailView: View {
     private func loadPatient(){
         
         patientVM.loadPatient(patient: self.patient){
-            loadData()
+            patientVM.loadData()
         }
     }
+    /*
     private func loadData(){ // TODO - déplacé ce code dans MV
         
         // On récupère le séjour en cours
@@ -349,7 +350,7 @@ struct PatientDetailView: View {
                 displayComments = false
             }
         }       
-    }
+    }*/
     
     private func formattedDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()

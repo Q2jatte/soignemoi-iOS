@@ -38,6 +38,7 @@ struct EditPrescriptionView: View {
     @Environment(\.presentationMode) var presentationMode
     
     // La source de vérité
+    @ObservedObject var patientVM: PatientViewModel
     var prescription: Prescription
     
     @State private var endDate: Date = Date()
@@ -56,8 +57,8 @@ struct EditPrescriptionView: View {
         VStack {
             Form {
                 Section(header: Text("Infos patient")) {
-                    Text(prescription.patient?.user.firstName ?? "")
-                    Text(prescription.patient?.user.lastName ?? "")
+                    Text(patientVM.firstName ?? "")
+                    Text(patientVM.lastName ?? "")
                 }
                 
                 Section(header: Text("Dates de validité")) {
@@ -137,7 +138,7 @@ struct EditPrescriptionView: View {
      Met à jour la prescription médicale avec la nouvelle date de fin de validité.
     */
     private func updatePrescription() {
-        let patientVM = PatientViewModel()
+        
         if let id = prescription.id {
             patientVM.updatePrescription(date: NewDate(id: id, date: endDate) ){ result in
                 switch result {
@@ -145,6 +146,8 @@ struct EditPrescriptionView: View {
                     self.titleAlert = "Prescription modifiée 👍"
                     self.messageAlert = message
                     self.showAlert = true
+                    // Rechargement des données
+                    patientVM.loadData()
                 case .failure(let error):
                     self.titleAlert = "Echec de modification 👎"
                     self.messageAlert = error.localizedDescription

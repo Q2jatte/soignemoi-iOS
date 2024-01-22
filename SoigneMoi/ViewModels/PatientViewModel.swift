@@ -67,7 +67,7 @@ class PatientViewModel: ObservableObject {
         - completion: Closure appelée une fois la récupération terminée.
             - Result: Tableau de séjours actuels ou erreur.
      */
-    func getCurrentStay(completion: @escaping (Result<[Stay], Error>) -> Void) {
+    private func getCurrentStay(completion: @escaping (Result<[Stay], Error>) -> Void) {
         
         if let id = self.patientId {
             api.getStaysByPatientAndStatus(id: id, status: "current") { result in
@@ -76,15 +76,12 @@ class PatientViewModel: ObservableObject {
                 case .success(let currentStay):
                     // Utilisation du DispatchQueue pour garantir que les modifications sont effectuées sur le thread principal
                     DispatchQueue.main.async {
-                        // màj du tableau
-                        self.currentStays = currentStay
                         completion(.success(currentStay))
                     }
                     
                 case .failure(let error):
                     print("GetStays failed with error: \(error)")
                     DispatchQueue.main.async {
-                        self.handleError(error)
                         completion(.failure(error))
                     }
                 }
@@ -102,7 +99,7 @@ class PatientViewModel: ObservableObject {
         - completion: Closure appelée une fois la récupération terminée.
             - Result: Tableau de séjours anciens ou erreur.
      */
-    func getOldStays(completion: @escaping (Result<[Stay], Error>) -> Void) {
+    private func getOldStays(completion: @escaping (Result<[Stay], Error>) -> Void) {
         
         if let id = self.patientId {
             api.getStaysByPatientAndStatus(id: id, status: "old") { result in
@@ -111,15 +108,12 @@ class PatientViewModel: ObservableObject {
                 case .success(let oldStays):
                     // Utilisation du DispatchQueue pour garantir que les modifications sont effectuées sur le thread principal
                     DispatchQueue.main.async {
-                        // màj du tableau
-                        self.oldStays = oldStays
                         completion(.success(oldStays))
                     }
                     
                 case .failure(let error):
                     print("GetStays failed with error: \(error)")
                     DispatchQueue.main.async {
-                        self.handleError(error)
                         completion(.failure(error))
                     }
                 }
@@ -137,7 +131,7 @@ class PatientViewModel: ObservableObject {
         - completion: Closure appelée une fois la récupération terminée.
             - Result: Tableau de prescriptions ou erreur.
      */
-    func getPrescriptions(completion: @escaping (Result<[Prescription], Error>) -> Void) {
+    private func getPrescriptions(completion: @escaping (Result<[Prescription], Error>) -> Void) {
         
         if let id = self.patientId {
             api.getPrescriptionsForOnePatient(id: id) { result in
@@ -146,15 +140,12 @@ class PatientViewModel: ObservableObject {
                 case .success(let prescriptions):
                     // Utilisation du DispatchQueue pour garantir que les modifications sont effectuées sur le thread principal
                     DispatchQueue.main.async {
-                        // màj du tableau
-                        self.prescriptions = prescriptions
                         completion(.success(prescriptions))
                     }
                     
                 case .failure(let error):
                     print("GetStays failed with error: \(error)")
                     DispatchQueue.main.async {
-                        self.handleError(error)
                         completion(.failure(error))
                     }
                 }
@@ -172,7 +163,7 @@ class PatientViewModel: ObservableObject {
         - completion: Closure appelée une fois la récupération terminée.
             - Result: Tableau de commentaires ou erreur.
      */
-    func getComments(completion: @escaping (Result<[Comment], Error>) -> Void) {
+    private func getComments(completion: @escaping (Result<[Comment], Error>) -> Void) {
         
         if let id = self.patientId {
             api.getcommentsForOnePatient(id: id) { result in
@@ -181,15 +172,11 @@ class PatientViewModel: ObservableObject {
                 case .success(let comments):
                     // Utilisation du DispatchQueue pour garantir que les modifications sont effectuées sur le thread principal
                     DispatchQueue.main.async {
-                        // màj du tableau
-                        self.comments = comments
                         completion(.success(comments))
                     }
                     
                 case .failure(let error):
-                    print("GetStays failed with error: \(error)")
                     DispatchQueue.main.async {
-                        self.handleError(error)
                         completion(.failure(error))
                     }
                 }
@@ -309,6 +296,54 @@ class PatientViewModel: ObservableObject {
                     self.handleError(error)
                     completion(.failure(error))
                 }
+            }
+        }
+    }
+    
+    // Chargement des données
+    func loadData(){ // TODO - déplacé ce code dans MV
+        
+        // On récupère le séjour en cours
+        getCurrentStay() { result in
+            switch result {
+            case .success(let currentStay):
+                // màj du tableau
+                self.currentStays = currentStay
+            case .failure(let error):
+                self.handleError(error)
+            }
+        }
+        
+        // On récupère les séjours précédents
+        getOldStays() { result in
+            switch result {
+            case .success(let oldStays):
+                // màj du tableau
+                self.oldStays = oldStays
+            case .failure(let error):
+                self.handleError(error)
+            }
+        }
+        
+        // On récupère les prescriptions
+        getPrescriptions() { result in
+            switch result {
+            case .success(let prescriptions):
+                // màj du tableau
+                self.prescriptions = prescriptions
+            case .failure(let error):
+                self.handleError(error)
+            }
+        }
+        
+        // On récupère les commentaires
+        getComments() { result in
+            switch result {
+            case .success(let comments):
+                // màj du tableau
+                self.comments = comments
+            case .failure(let error):
+                self.handleError(error)
             }
         }
     }

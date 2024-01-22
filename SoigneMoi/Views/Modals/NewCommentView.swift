@@ -100,6 +100,8 @@ struct NewCommentView: View {
                 self.titleAlert = "Succès 👍"
                 self.messageAlert = message
                 self.showAlert = true
+                // Rechargement des données
+                patientVM.loadData()
             case .failure(let error):
                 self.titleAlert = "Echec 👎"
                 self.messageAlert = error.localizedDescription
