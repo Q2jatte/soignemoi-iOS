@@ -58,6 +58,9 @@ struct PatientDetailView: View {
     @State private var selectedComment: Comment?
     @State private var selectedStay: Stay?
     
+    // Navigation
+    @Environment(\.presentationMode) var presentationMode
+    
     // MARK: - Body
     var body: some View {
         NavigationStack {
@@ -286,10 +289,15 @@ struct PatientDetailView: View {
             .sheet(isPresented: $isNewCommentPresented) {
                 NewCommentView(patientVM: patientVM)
             }
-            .navigationBarBackButtonHidden(true)
+            //.navigationBarBackButtonHidden(true)
             .padding(20)
             
         }
+        .navigationBarBackButtonHidden(true) // Masquer le bouton de retour par défaut
+        .navigationBarItems(leading: CustomBackButton {
+            // Action personnalisée à exécuter lorsqu'on appuie sur le bouton de retour
+            self.presentationMode.wrappedValue.dismiss()
+        })
     }
     
     // MARK: - Methods
@@ -347,6 +355,22 @@ struct PatientDetailView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMM yyyy"
         return dateFormatter.string(from: date)
+    }
+}
+
+struct CustomBackButton: View {
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: {
+            // Appel de l'action personnalisée définie
+            self.action()
+        }) {
+            HStack {
+                Image(systemName: "arrow.left.circle")
+                Text("Retour")
+            }
+        }
     }
 }
 

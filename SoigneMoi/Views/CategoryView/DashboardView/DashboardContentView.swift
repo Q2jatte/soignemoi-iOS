@@ -83,21 +83,23 @@ struct DashboardContentView: View {
                             .foregroundColor(Color("Emerald"))
                             
                             List {
-                                ForEach(dashboardVM.patientsList.indices,id: \.self) { index in
+                                ForEach(dashboardVM.patientsList.indices, id: \.self) { index in
                                     let patient = dashboardVM.patientsList[index]
                                     NavigationLink(destination: PatientDetailView(patient: patient.patient, patientVM: PatientViewModel())) {
                                         HStack{
                                             Text(patient.patient.user.name)
                                             Spacer()
-                                            Text("\(formattedDate(patient.entranceDate))")
+                                            Text(formattedDate(patient.entranceDate))
                                             Spacer()
-                                            Text("\(formattedDate(patient.dischargeDate))")
+                                            Text(formattedDate(patient.dischargeDate))
                                         }
                                     }
                                     .listRowBackground(index % 2 == 0 ? Color("EmeraldLight") : Color.white)
                                 }
                             }
-                            .listStyle(.plain)
+                            .navigationDestination(for: Patient.self) { patient in
+                                PatientDetailView(patient: patient, patientVM: PatientViewModel())
+                            }
                         }
                         .padding(10)
                         .background(Color("LightGrey"))
