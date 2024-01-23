@@ -34,6 +34,8 @@ struct NewCommentView: View {
     // MARK - Properties
     @State private var commentTitle: String = ""
     @State private var commentContent: String = ""
+    let limitTitle = 250
+    let limitContent = 500
     
     // La source de vérité
     @ObservedObject var patientVM: PatientViewModel
@@ -55,7 +57,17 @@ struct NewCommentView: View {
                 
                 Section(header: Text("Avis médical")) {
                     TextField("Titre", text: $commentTitle)
+                        .onChange(of: commentTitle) { newText in
+                            if newText.count > limitTitle {
+                                commentTitle = String(newText.prefix(limitTitle))
+                            }
+                        }
                     TextField("Commentaire", text: $commentContent)
+                        .onChange(of: commentContent) { newText in
+                            if newText.count > limitContent {
+                                commentContent = String(newText.prefix(limitTitle))
+                            }
+                        }
                 }
             }
             .alert(isPresented: $showAlert) {

@@ -27,7 +27,7 @@ enum ApiError: Error {
         case .missingToken:
             return "Token manquant"
         case .authenticationFailure:
-            return "Échec de l'authentification. Identifiants incorrects."
+            return "Échec de l'authentification."
         case .serverConnectionError:
             return "Impossible de se connecter au serveur."
         case .cannotConnectToHost:

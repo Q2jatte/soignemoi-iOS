@@ -45,6 +45,9 @@ struct NewPrescriptionView: View {
     @State private var medicationName: String = ""
     @State private var medicationDosage: String = ""
     
+    let limitMedicationName = 250
+    let limitMedicationDosage = 500
+    
     // La source de vérité
     @ObservedObject var patientVM: PatientViewModel
     
@@ -80,7 +83,17 @@ struct NewPrescriptionView: View {
                 Section(header: Text("Traitements")) {
                     HStack {
                         TextField("Nom du traitement", text: $medicationName)
+                            .onChange(of: medicationName) { newText in
+                                if newText.count > limitMedicationName {
+                                    medicationName = String(newText.prefix(limitMedicationName))
+                                }
+                            }
                         TextField("Posologie", text: $medicationDosage)
+                            .onChange(of: medicationDosage) { newText in
+                                if newText.count > limitMedicationDosage {
+                                    medicationDosage = String(newText.prefix(limitMedicationDosage))
+                                }
+                            }
                         Button(action: {
                             // Ajouter un nouveau médicament
                             addMedication()

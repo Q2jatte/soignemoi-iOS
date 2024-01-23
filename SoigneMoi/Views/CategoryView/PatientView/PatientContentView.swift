@@ -33,6 +33,8 @@ struct PatientContentView: View {
     @State private var displayResult: Bool = false
     @State private var isActive = false
     @ObservedObject var patientVM: PatientViewModel
+    
+    private let limitSearchText = 50
         
     // MARK: - Body
     var body: some View {
@@ -45,6 +47,11 @@ struct PatientContentView: View {
                         searchPatient()
                     }
                 })
+                .onChange(of: searchText) { newText in
+                    if newText.count > limitSearchText {
+                        searchText = String(newText.prefix(limitSearchText))
+                    }
+                }
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)

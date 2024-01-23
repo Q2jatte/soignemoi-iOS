@@ -39,6 +39,10 @@ struct LoginView: View {
     @State private var password: String = ""
     @State private var isLoading: Bool = false
     
+    // Limite de caractères dans le champ texte
+    private let limitUserName = 50
+    private let limitPassword = 30
+    
     // MARK: - Body
     var body: some View {
         if loginVM.isAuthenticated {
@@ -57,14 +61,25 @@ struct LoginView: View {
                 
                 // username field
                 TextField("Email", text: $username)
+                    .onChange(of: username) { newText in
+                        if newText.count > limitUserName {
+                            username = String(newText.prefix(limitUserName))
+                        }
+                    }
                     .keyboardType(.emailAddress) //clavier spécifique
                     .autocapitalization(.none)
                     .padding()
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 400)
+               
                 
                 // password field
                 SecureField("Mot de passe", text: $password)
+                    .onChange(of: password) { newText in
+                        if newText.count > limitPassword {
+                            password = String(newText.prefix(limitPassword))
+                        }
+                    }
                     .padding()
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: 400)
