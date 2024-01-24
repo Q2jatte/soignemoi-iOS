@@ -145,7 +145,8 @@ struct PatientDetailView: View {
                                     }
                                 }
                                 .listRowBackground(index % 2 == 0 ? Color("EmeraldLight") : Color.white)
-                            }
+                            }                            
+                            .accessibilityIdentifier("list")
                             // modal edition prescription
                             .sheet(item: $selectedPrescription) { selectedPrescription in
                                 EditPrescriptionView(patientVM: patientVM, prescription: selectedPrescription)
@@ -301,56 +302,14 @@ struct PatientDetailView: View {
     }
     
     // MARK: - Methods
+    
+    /// Chargement des données du patient
     private func loadPatient(){
         
         patientVM.loadPatient(patient: self.patient){
             patientVM.loadData()
         }
     }
-    /*
-    private func loadData(){ // TODO - déplacé ce code dans MV
-        
-        // On récupère le séjour en cours
-        patientVM.getCurrentStay() { result in
-            switch result {
-            case .success(_):
-                displayCurrentStay = true
-            case .failure(_):
-                displayCurrentStay = false
-            }
-        }
-        
-        // On récupère les séjours précédents
-        patientVM.getOldStays() { result in
-            switch result {
-            case .success(_):
-                displayOldStays = true
-            case .failure(_):
-                displayOldStays = false
-            }
-        }
-        
-        // On récupère les prescriptions
-        patientVM.getPrescriptions() { result in
-            switch result {
-            case .success(_):
-                displayPrescriptions = true
-            case .failure(_):
-                displayPrescriptions = false
-            }
-        }
-        
-        // On récupère les commentaires
-        patientVM.getComments() { result in
-            switch result {
-            case .success(_):
-                displayComments = true
-                print(patientVM.oldStays)
-            case .failure(_):
-                displayComments = false
-            }
-        }       
-    }*/
     
     private func formattedDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()

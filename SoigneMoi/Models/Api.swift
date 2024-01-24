@@ -53,7 +53,9 @@ enum ApiError: Error {
 
 class Api {
     
-    static let baseURL = URL(string: "http://127.0.0.1:8000")!
+    //static let baseURL = URL(string: "http://127.0.0.1:8000")!
+    
+    static let baseURL = URL(string: Bundle.main.object(forInfoDictionaryKey: "API_ROOT_URL") as! String)!
     static let loginURL = baseURL.appendingPathComponent("/api/login_check")
     static let profileURL = baseURL.appendingPathComponent("/api/user/profile")
     static let getPatientURL = baseURL.appendingPathComponent("/api/patients")

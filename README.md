@@ -2,6 +2,7 @@
 
 ![Static Badge](https://img.shields.io/badge/Swift-swift-blue?logo=swift)
 
+DESIGNED FOR IPADOS
 
 This application is dedicated to doctors at the SoigneMoi hospital. It allows, after authentication, to track patients, create medical prescriptions, and write reviews following a medical visit.
 
@@ -31,8 +32,11 @@ Make sure you have the following installed before getting started:
     ```bash
     open SoigneMoi.xcodeproj
     ```
+4. Customize API URL:
 
-4. Select the iPad simulator or a connected iPad as the target and press the "Run" button in Xcode to build and run the application.
+    In the "SoigneMoi" directory, display the Info.plist file then modify the API_ROOT_URL value.
+    
+5. Select the iPad simulator or a connected iPad as the target and press the "Run" button in Xcode to build and run the application.
 
 ## Dependencies
 

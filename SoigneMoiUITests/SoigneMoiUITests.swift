@@ -4,14 +4,15 @@
 //
 //  Created by Eric Terrisson on 05/12/2023.
 //
+// IMPORTANT : pour éviter le bug de saisie, le clavier externe doit etre désactivé ( Simulator > I/O > Keyboard > Connect Hardware keyboard
 
 import XCTest
 @testable import SoigneMoi
 
 final class SoigneMoiUITests: XCTestCase {
     
-    private let username: String = "p.charvet@soignemoi.com"
-    private let password: String = "Studi2024*"
+    private let username: String = ProcessInfo.processInfo.environment["TEST_USERNAME"]!
+    private let password: String = ProcessInfo.processInfo.environment["TEST_PASSWORD"]!
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -21,12 +22,9 @@ final class SoigneMoiUITests: XCTestCase {
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
     
     func test_create_A_Prescription_For_A_Visited_Patient() throws {
+        
         let app = XCUIApplication()
         app.launch()
         
@@ -41,8 +39,11 @@ final class SoigneMoiUITests: XCTestCase {
         
         // On remplit les champs avec des valeurs d'exemple
         emailTextField.tap()
+        sleep(1)
         emailTextField.typeText(self.username)
+        sleep(1)
         passwordSecureTextField.tap()
+        sleep(1)
         passwordSecureTextField.typeText(self.password)
         
         app.buttons["Se connecter"].tap()
@@ -79,8 +80,11 @@ final class SoigneMoiUITests: XCTestCase {
         
         // On remplit les champs avec des valeurs d'exemple
         emailTextField.tap()
+        sleep(1)
         emailTextField.typeText(self.username)
+        sleep(1)
         passwordSecureTextField.tap()
+        sleep(1)
         passwordSecureTextField.typeText(self.password)
         
         app.buttons["Se connecter"].tap()
@@ -108,8 +112,8 @@ final class SoigneMoiUITests: XCTestCase {
             return formatter
         }()
         let currentDate = Date()
-        let tomorrowDate = currentDate.addingTimeInterval(24 * 60 * 60) // 24 hours in seconds
-        let dateString = dateFormatter.string(from: tomorrowDate)
+        let anotherDay = currentDate.addingTimeInterval(TimeInterval(24 * 60 * 60 * Int(arc4random_uniform(11)))) // 24 hours in seconds * random Int
+        let dateString = dateFormatter.string(from: anotherDay)
         
         let app = XCUIApplication()
         app.launch()
@@ -123,35 +127,27 @@ final class SoigneMoiUITests: XCTestCase {
         
         // On remplit les champs avec des valeurs d'exemple
         emailTextField.tap()
+        sleep(1)
         emailTextField.typeText(self.username)
+        sleep(1)
         passwordSecureTextField.tap()
+        sleep(1)
         passwordSecureTextField.typeText(self.password)
-        
         app.buttons["Se connecter"].tap()
-        
-        sleep(5)
-        
+        sleep(3)
         let collectionViewsQuery = app.collectionViews
         collectionViewsQuery.buttons.element(boundBy: 0).tap()
-        
-        collectionViewsQuery
-            .containing(.other, identifier: "Vertical scroll bar, 6 pages")
-            .children(matching: .cell)
-            .element(boundBy: 0)
-            .buttons.element(boundBy: 0)
-            .tap()
-        
+        sleep(3)
+        app.collectionViews["list"].children(matching: .cell).element(boundBy: 0).buttons.element(boundBy: 0).tap()
         app.collectionViews/*@START_MENU_TOKEN@*/.datePickers.containing(.button, identifier:"Date Picker").element/*[[".cells.datePickers.containing(.button, identifier:\"Date Picker\").element",".datePickers.containing(.button, identifier:\"Date Picker\").element"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         app.datePickers.collectionViews.buttons[dateString].children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.tap()
         app/*@START_MENU_TOKEN@*/.buttons["PopoverDismissRegion"]/*[[".buttons[\"dismiss popup\"]",".buttons[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        //let datePickerButton = app.datePickers.collectionViews.buttons[dateString]
-        //datePickerButton.children(matching: .other).element.tap()
         app.buttons["Enregistrer"].tap()
-        sleep(5)
+        sleep(3)
         let alert = app.alerts["Prescription modifiée 👍"]
-        XCTAssertTrue(alert.exists)                                
+        XCTAssertTrue(alert.exists)
     }
-
+    
     func test_LaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
             // This measures how long it takes to launch your application.
