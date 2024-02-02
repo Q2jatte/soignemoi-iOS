@@ -65,7 +65,8 @@ class Api {
     static let getStaysByPatientAndStatusURL = baseURL.appendingPathComponent("/api/patients")
     static let prescriptionURL = baseURL.appendingPathComponent("/api/prescription")
     static let commentURL = baseURL.appendingPathComponent("/api/comment")
-    static let profileImageURL = baseURL.appendingPathComponent("/upload/images")
+    static let getOccupationURL = baseURL.appendingPathComponent("/api/stay/occupation")
+    static let profileImageURL = baseURL.appendingPathComponent("/uploads/images")
     
     // Seeiosn sera utilisé pour les tests avec Mocker
     private let session: URLSession
@@ -375,6 +376,60 @@ class Api {
                         } catch {
                             print("Erreur lors de la désérialisation JSON : \(error)")
                             completion(.failure(error))
+                        }
+                    }
+                    
+                case 401:
+                    completion(.failure(ApiError.authenticationFailure))
+                    
+                default:
+                    completion(.failure(ApiError.unhandledResponse(httpResponse.statusCode)))
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    /**
+     Retourne les nombres de patient actuellement dans l'hopital.
+     
+     - Parameters:
+        - id: L'identifiant du patient pour lequel récupérer les commentaires.
+        - completion: Une closure appelée une fois que la requête est terminée.
+     - Returns: Un résultat contenant un tableau d'objets `Comment` en cas de succès, ou une erreur en cas d'échec.
+     - Throws: Lève les erreurs suivantes :
+        - déserialisation
+        - authentification
+        - erreur serveur
+    */
+    func getOccupationRequest(completion: @escaping (Result<String, Error>) -> Void) {
+        
+        let url = Api.getOccupationURL
+        
+        // Création de la requête
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        let token = ActiveUser.shared.tokenManager.getToken()
+        request.setValue("bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        // Création de la tâche URLSession pour envoyer la requête
+        let task = session.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("Code http de réponse : \(httpResponse.statusCode)")
+                
+                // Gérer les différentes réponses HTTP
+                switch httpResponse.statusCode {
+                case 200:
+                    if let responseData = data {
+                        if let responseString = String(data: responseData, encoding: .utf8) {
+                            completion(.success(responseString))
+                        } else {
+                            completion(.failure(ApiError.invalidData))    
                         }
                     }
                     

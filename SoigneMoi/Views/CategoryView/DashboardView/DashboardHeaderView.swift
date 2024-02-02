@@ -26,6 +26,9 @@ import SwiftUI
 */
 struct DashboardHeaderView: View {
     
+    // MARK: - Properties
+    @ObservedObject var headerVM: HeaderViewModel = HeaderViewModel()
+    
     // MARK: - Body
     var body: some View {
         ZStack {
@@ -63,7 +66,7 @@ struct DashboardHeaderView: View {
                                 .font(.system(size: 18))
                                 .foregroundColor(.white)
                         }
-                        Text("9 patients en cardiologie")
+                        Text("\(headerVM.occupation) patients en cardiologie")
                     }
                     Spacer() // pour l'alignement en haut
                     
@@ -72,6 +75,9 @@ struct DashboardHeaderView: View {
                 
                 Spacer() // pour l'alignement à gauche
             }
+        }
+        .onAppear{
+            loadData()
         }
         .frame(height: 175)
         // image arrière plan
@@ -92,13 +98,24 @@ struct DashboardHeaderView: View {
      */
     func formattedDate() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E. dd MMM. yyyy"
+        dateFormatter.dateFormat = "E. dd MMMM yyyy"
         return dateFormatter.string(from: Date())
+    }
+    
+    /**
+     Méthode pour charger les données d'occupation.
+    */
+    private func loadData() {
+        // On récupère les données patients
+        headerVM.getOccupation()
     }
 }
 
 struct DashboardHeaderView_Previews: PreviewProvider {
+    
+    static var headerVM: HeaderViewModel = HeaderViewModel()
+    
     static var previews: some View {
-        DashboardHeaderView()
+        DashboardHeaderView(headerVM: headerVM)
     }
 }
