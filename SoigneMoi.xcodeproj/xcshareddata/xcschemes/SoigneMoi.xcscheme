@@ -39,12 +39,12 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "TEST_PASSWORD"
-            value = "Studi2024*"
+            value = "password"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "TEST_USERNAME"
-            value = "p.charvet@soignemoi.com"
+            value = "a.lim@soignemoi.com"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
