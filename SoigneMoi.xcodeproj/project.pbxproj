@@ -119,6 +119,7 @@
 		27F704BF2B2CBBFC0083E78F /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
 		27F704C72B2CCFA10083E78F /* CustomTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextStyle.swift; sourceTree = "<group>"; };
 		27F704C92B2CE2E00083E78F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		27F94F8F2B74E8FD007E1BE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		27F9C7962B5E6FF90026188B /* JWTPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWTPayload.swift; sourceTree = "<group>"; };
 		27F9C7982B5E75DC0026188B /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
 		27FF21312B35779900FA4351 /* NewPrescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPrescriptionView.swift; sourceTree = "<group>"; };
@@ -194,6 +195,7 @@
 		27A315882B1F63BB004EA1A6 /* SoigneMoiTests */ = {
 			isa = PBXGroup;
 			children = (
+				27F94F8F2B74E8FD007E1BE2 /* Info.plist */,
 				27C9BF052B596B1400CA812A /* ModelsTest.swift */,
 				2740930C2B6006610007598A /* ModelsViewTest.swift */,
 			);
@@ -692,6 +694,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DCAZQ9Q5D9;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoigneMoiTests/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.eterrisson.soignemoi.SoigneMoiTests;
@@ -712,6 +716,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DCAZQ9Q5D9;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoigneMoiTests/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.eterrisson.soignemoi.SoigneMoiTests;

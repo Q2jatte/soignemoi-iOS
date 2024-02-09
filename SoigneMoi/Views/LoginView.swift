@@ -122,14 +122,15 @@ struct LoginView: View {
                                             // Brut force security
                                             sleep(3)
                                             ActiveUser.shared.isAuthenticated = false
+                                            isLoading = false
                                         }
                                     }
                                 case .failure(_):
                                     // Brut force security
                                     sleep(3)
                                     ActiveUser.shared.isAuthenticated = false
+                                    isLoading = false
                                 }
-                                isLoading = false
                             }
                         }
                 }
